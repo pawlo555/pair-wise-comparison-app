@@ -3,6 +3,8 @@ import numpy as np
 
 from typing import List, Union
 
+RI = {1: 10**-8, 2: 10**-8, 3: 0.58, 4: 0.9, 5: 1.12, 6: 1.21, 7: 1.32, 8: 1.41, 9: 1.46, 10: 1.49}
+
 
 def get_columns_names(df: pd.DataFrame) -> Union[object, List[str]]:
     return df.columns.values.tolist()
@@ -31,3 +33,11 @@ def calc_evm_ranking(preferences: np.ndarray) -> np.ndarray:
     n = preferences.shape[-1]
     geometric_average = np.prod(preferences, axis=-1)**(1/n)
     return geometric_average / np.sum(geometric_average)
+
+
+def calc_consistency_ratio(preferences: np.ndarray, evm_ranking: np.ndarray) -> float:
+    n = preferences.shape[-1]
+    cv = np.matmul(preferences, evm_ranking)
+    cv_lambda = np.sum(cv)
+    ci = (cv_lambda - n) / (n-1)
+    return ci / RI[n]

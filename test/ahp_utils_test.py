@@ -44,6 +44,13 @@ class TestAHPUtils(unittest.TestCase):
         result = utils.calc_evm_ranking(preferences)
         self.assertTrue(np.all((true - result) < np.finfo(np.float32).eps))
 
+    def test_calc_consistency_ratio(self):
+        preferences = np.array([[1, 2, 8], [1/2, 1, 4], [1/8, 1/4, 1]])
+        evm = utils.calc_evm_ranking(preferences)
+        true = 0.0
+        result = utils.calc_consistency_ratio(preferences, evm)
+        self.assertAlmostEqual(true, result, 5)
+
 
 if __name__ == '__main__':
     unittest.main()
