@@ -1,8 +1,10 @@
+import sys
+
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import QSize
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 
-from PairWiseComparisonApp.app.stages.stageManager import StageManager
+from app.widgets.DecisionCreator import DecisionCreator
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -15,8 +17,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.centralWidget = QWidget()
         self.centralLayout = QVBoxLayout()
         self.setCentralWidget(self.centralWidget)
-        self.centralWidget.setLayout(self.centralLayout)
+        self.centralWidget.setLayout(DecisionCreator())
 
-        self.stageManager = StageManager(self.centralWidget)
-        self.centralLayout.add(self.stageWidget)
-        self.stageManager.setNextStage()
+
+def main():
+    app = QtWidgets.QApplication([])
+    widget = MainWindow()
+    widget.show()
+    sys.exit(app.exec())
+
+
+if __name__ == '__main__':
+    main()
