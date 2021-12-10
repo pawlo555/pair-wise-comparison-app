@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QVBoxLayout, QPushButton, QListWidget, QLabel
+from PyQt6.QtWidgets import QVBoxLayout, QPushButton, QListWidget, QLabel, QTableWidget
 
 from app import MainWindow
 
@@ -62,6 +62,12 @@ class MenuLayout(QVBoxLayout):
         self.results = QPushButton("Show results")
         self.results.clicked.connect(self.resultsClicked)
         self.addWidget(self.results)
+
+        tableWidget = QTableWidget()
+        tableWidget.setRowCount(10)
+        tableWidget.setColumnCount(5)
+
+        self.addWidget(tableWidget)
 
     def addMovieClicked(self):
         self.mainWindow.changeMainLayout(0)

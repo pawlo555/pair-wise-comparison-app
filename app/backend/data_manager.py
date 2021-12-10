@@ -25,3 +25,18 @@ class DataManager:
 
     def delete_user(self, user_name: str):
         pass
+
+    def get_criterion_matrix(self, criterion_name: str, user_name: str):
+        pass
+
+    def set_method(self):
+        pass
+
+    def calc_results(self):
+        pass
+
+    def get_result_matrix(self, criterion_name: str):
+        pass
+
+    def get_inconsistency_matrix(self, criterion_name: str):
+        pass
