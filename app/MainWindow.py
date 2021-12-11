@@ -2,16 +2,17 @@ from PyQt6 import QtWidgets
 from PyQt6.QtCore import QSize
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QStackedLayout
 
-from app.layouts.MenuLayout import MenuLayout
-from app.layouts.MovieAddLayout import MovieAddLayout
-from app.layouts.GradingLayout import GradingLayout
-from app.layouts.ResultsLayout import ResultsLayout
-from app.layouts.CriteriaLayout import CriteriaLayout
+from PairWiseComparisonApp.app.backend.data_manager import DataManager
+from PairWiseComparisonApp.app.widgets.ComplexCriteriaAddWidget import ComplexCriteriaAddWidget
+from PairWiseComparisonApp.app.widgets.CriteriaAddWidget import CriteriaAddWidget
+from PairWiseComparisonApp.app.widgets.MovieAddWidget import MovieAddWidget
 
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
+
+        self.dataManager = DataManager()
 
         self.setWindowTitle("Kox apka")
         self.setMinimumSize(QSize(640, 480))
@@ -21,25 +22,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Widgets for stackedLayout - we can swap between them
         self.stackedLayout = QStackedLayout()
-        self.addMovieWidget = QWidget()
-        self.addMovieWidget.setLayout(MovieAddLayout())
-        self.criteriaWidget = QWidget()
-        self.criteriaWidget.setLayout(CriteriaLayout())
-        self.gradingWidget = QWidget()
-        self.gradingWidget.setLayout(GradingLayout())
-        self.resultsWidget = QWidget()
-        self.resultsWidget.setLayout(ResultsLayout())
+        self.movieAddWidget = MovieAddWidget(self, self.dataManager, self.setNextLayout)
+        self.criteriaAddWidget = CriteriaAddWidget(self, self.dataManager, self.setNextLayout)
+        self.complexCriteriaAddWidget = ComplexCriteriaAddWidget(self, self.dataManager, self.setNextLayout)
 
-        self.stackedLayout.addWidget(self.addMovieWidget)
-        self.stackedLayout.addWidget(self.criteriaWidget)
-        self.stackedLayout.addWidget(self.gradingWidget)
-        self.stackedLayout.addWidget(self.resultsWidget)
-
-        self.centralLayout.addLayout(MenuLayout(self))
-        self.centralLayout.addLayout(self.stackedLayout)
+        self.stackedLayout.addWidget(self.movieAddWidget)
+        self.stackedLayout.addWidget(self.criteriaAddWidget)
+        self.stackedLayout.addWidget(self.complexCriteriaAddWidget)
 
         self.setCentralWidget(self.centralWidget)
-        self.centralWidget.setLayout(self.centralLayout)
+        self.centralWidget.setLayout(self.stackedLayout)
 
-    def changeMainLayout(self, index: int):
+    def setNextLayout(self, index: int):
         self.stackedLayout.setCurrentIndex(index)
