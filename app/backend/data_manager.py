@@ -69,7 +69,12 @@ class DataManager:
             self.experts[expert_name] = Expert(self.criteria_hierarchy, sorted(self.movies_dictionaries.keys()))
 
     def get_criterion_matrix(self, criterion_name: str, user_name: str):
+<<<<<<< Updated upstream
         self.experts[user_name].get_comparisons(criterion_name)
+=======
+        import numpy as np
+        return np.zeros((10,10))
+>>>>>>> Stashed changes
 
     def set_method(self, method_name: str = "EVM"):
         self.method_name = method_name
