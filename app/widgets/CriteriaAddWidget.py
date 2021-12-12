@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QLineEdit
 
 class CriteriaAddWidget(QWidget):
     """
-        Widget to add new criteria to movies list
+        Widget to add new criteria
     """
     def __init__(self, parent, dataManager, nextLayoutTrigger):
         super().__init__(parent)

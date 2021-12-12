@@ -37,11 +37,14 @@ class DataManager:
     def create_complex_criterion(self, name: str, subcriteria: List[str]):
         pass
 
-    def add_user(self, user: str):
+    def add_expert(self, expert_name: str):
         pass
 
-    def delete_user(self, user_name: str):
+    def delete_expert(self, expert_name: str):
         pass
+
+    def get_experts_list(self) -> List[str]:
+        return ['A', 'asd', 'ag']
 
     def get_criterion_matrix(self, criterion_name: str, user_name: str):
         pass

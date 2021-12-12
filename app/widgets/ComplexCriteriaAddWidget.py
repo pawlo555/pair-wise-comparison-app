@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButt
 
 class ComplexCriteriaAddWidget(QWidget):
     """
-        Widget to add new criteria to movies list
+        Widget to create complex criteria
     """
     def __init__(self, parent, dataManager, nextLayoutTrigger):
         super().__init__(parent)
@@ -29,7 +29,7 @@ class ComplexCriteriaAddWidget(QWidget):
         # List of all criteria
         self.allCriteria = QListWidget(self)
         # TODO: selection mode to enable multiple choice
-        # self.allCriteria.setSelectionMode(QAbstractItemView.MultiSelection)
+        # self.allCriteria.setSelectionModel(2)
 
         criteria_list = self.dataManager.get_all_criteria_list()
         for criterion in criteria_list:
