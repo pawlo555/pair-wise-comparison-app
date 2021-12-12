@@ -44,10 +44,8 @@ class DataManager:
     def get_all_criteria_list(self) -> List[str]:
         return VALUES
 
-    def get_picked_criteria_list(self, selected_criteria: List[str]) -> List[str]:
-        all_criteria = set(self.criteria_hierarchy.criteria_list())
-        selected_set = set(selected_criteria)
-        return sorted(list(all_criteria.intersection(selected_set)))
+    def get_picked_criteria_list(self) -> List[str]:
+        return self.criteria_hierarchy.criteria_list()
 
     def create_complex_criterion(self, name: str, subcriteria: List[str], parent_name: str = "Result"):
         self.criteria_hierarchy.add_node(name, parent_name, subcriteria)
