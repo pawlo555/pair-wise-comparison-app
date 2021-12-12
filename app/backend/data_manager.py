@@ -44,10 +44,8 @@ class DataManager:
     def get_all_criteria_list(self) -> List[str]:
         return VALUES
 
-    def get_picked_criteria_list(self, selected_criteria: List[str]) -> List[str]:
-        all_criteria = set(self.criteria_hierarchy.criteria_list())
-        selected_set = set(selected_criteria)
-        return sorted(list(all_criteria.intersection(selected_set)))
+    def get_picked_criteria_list(self) -> List[str]:
+        return self.criteria_hierarchy.criteria_list()
 
     def create_complex_criterion(self, name: str, subcriteria: List[str], parent_name: str = "Result"):
         self.criteria_hierarchy.add_node(name, parent_name, subcriteria)
@@ -69,12 +67,7 @@ class DataManager:
             self.experts[expert_name] = Expert(self.criteria_hierarchy, sorted(self.movies_dictionaries.keys()))
 
     def get_criterion_matrix(self, criterion_name: str, user_name: str):
-<<<<<<< Updated upstream
         self.experts[user_name].get_comparisons(criterion_name)
-=======
-        import numpy as np
-        return np.zeros((10,10))
->>>>>>> Stashed changes
 
     def set_method(self, method_name: str = "EVM"):
         self.method_name = method_name

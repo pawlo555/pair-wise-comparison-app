@@ -52,6 +52,9 @@ class MoviesRateWidget(QWidget):
 
         # Ranking Matrix
         self.rankingMatrix = QTableWidget()
+        movies = self.dataManager.get_movies_list()
+        self.rankingMatrix.setVerticalHeaderLabels(movies)
+        self.rankingMatrix.setHorizontalHeaderLabels(movies)
         self.HLayout.addWidget(self.rankingMatrix)
         self.mainLayout.addLayout(self.HLayout)
 
