@@ -1,8 +1,7 @@
-from PyQt5.QtCore import Qt
-from PyQt6 import QtCore, QtGui
+from PyQt6 import QtCore, QtGui, Qt
 from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox, QSizePolicy, \
-    QListWidget, QListWidgetItem
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox,\
+    QSizePolicy, QListWidget, QListWidgetItem
 
 
 class MovieAddWidget(QWidget):
@@ -54,6 +53,7 @@ class MovieAddWidget(QWidget):
 
         if result:
             moviesList = self.dataManager.get_movies_list()
+            self.pickedMovies.clear()
             for movie in moviesList:
                 item = QListWidgetItem(movie)
                 self.pickedMovies.addItem(item)

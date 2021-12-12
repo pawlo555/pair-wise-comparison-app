@@ -24,9 +24,6 @@ class VotingMatrix:
         self.matrix[x][y] = value
         self.matrix[y][x] = 1/value
 
-    def add_movie(self, name):
-        pass
-
     def calc_ranking(self, method: str = "EVM", need_all_values: bool = False) -> np.ndarray:
         """
         Calc matrix ranking based on voter preferences
@@ -55,8 +52,14 @@ class VotingMatrix:
         """
         pass
 
-    def to_pandas_frame(self) -> pd.DataFrame:
+    def calc_inconsistency(self) -> np.array:
+        pass
+
+    def to_dataframe(self) -> pd.DataFrame:
         """
         :return: Returns data frame to display on app
         """
         return pd.DataFrame(data=self.matrix, index=self.names, columns=self.names)
+
+    def get_filled_dataframe(self, filled_df: pd.DataFrame):
+        self.matrix = filled_df.to_numpy()
