@@ -26,8 +26,5 @@ class Expert:
     def get_comparison_results(self, criterion_name, method: str = "EVM", need_all_values: bool = False) -> np.array:
         return self.matrix_dict[criterion_name].calc_ranking(method, need_all_values)
 
-    def calc_ranking(self, criterion_name: str, all_values_need: bool = False):
-        return self.matrix_dict[criterion_name].calc_ranking(criterion_name, all_values_need)
-
-    def calc_inconsistency(self, criterion_name: str):
-        return self.matrix_dict[criterion_name].calc_inconsistency()
+    def get_voting_matrix(self, criterion_name: str) -> VotingMatrix:
+        return self.matrix_dict[criterion_name]
