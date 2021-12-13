@@ -1,8 +1,10 @@
+import pandas as pd
 from typing import List
 
 from app.backend.expert import Expert
 from app.backend.api_manager import APIManager, VALUES
 from app.backend.criteria_hierarchy import CriteriaHierarchy
+from app.backend.results import Results
 
 
 class DataManager:
@@ -73,10 +75,12 @@ class DataManager:
         self.method_name = method_name
 
     def calc_results(self):
+        experts_results = {}
+        for expert_name in self.experts.keys():
+            experts_results[expert_name] = Results(self.experts[expert_name])
+
+    def get_result_matrix(self, criterion_name: str) -> pd.DataFrame:
         pass
 
-    def get_result_matrix(self, criterion_name: str):
-        pass
-
-    def get_inconsistency_matrix(self, criterion_name: str):
+    def get_inconsistency(self, criterion_name: str) -> pd.DataFrame:
         pass
