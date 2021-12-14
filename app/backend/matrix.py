@@ -43,11 +43,13 @@ class VotingMatrix:
         Calc matrix ranking based on voter preferences
         :return: np.array of results: 1 - movie1, 2 - movie2
         """
+        if np.allclose((self.matrix + self.matrix.T) / 2, self.matrix):
+            return np.ones(shape=(1, self.matrix.shape[0])) / self.matrix.shape[0]
         if (self.matrix == 0).any():
             self.__feed_empty_values_evm()
         sympy_matrix = Matrix(self.matrix)
         eigenvector = sympy_matrix.eigenvects()
-        principal_eigenvector = np.real(np.array(eigenvector[0][2]))
+        principal_eigenvector = np.abs(np.real(np.array(eigenvector[0][2])))
         principal_eigenvector = principal_eigenvector[:, :, 0]
         principal_eigenvector = np.abs(principal_eigenvector)
         return principal_eigenvector / np.sum(principal_eigenvector)

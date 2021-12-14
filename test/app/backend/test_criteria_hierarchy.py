@@ -37,6 +37,7 @@ class TestTreeNode(unittest.TestCase):
         self.assertEqual(set(criterion_levels.keys()), {0, 1})
         self.assertEqual(len(criterion_levels[0]), 1)
         self.assertEqual(len(criterion_levels[1]), len(true_criteria_list))
+        self.assertEqual(len(hierarchy.node_dict['Result'].get_children()), len(true_criteria_list))
 
     def test_complex_hierarchy(self):
         hierarchy = CriteriaHierarchy()

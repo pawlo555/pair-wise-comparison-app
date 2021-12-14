@@ -85,8 +85,17 @@ class TestVotingMatrix(unittest.TestCase):
 
         true_matrix = VotingMatrix(['_' for _ in range(3)])
         true_matrix.matrix = np.array([[1,     1.414, 0.423],
-                                                    [0.707, 1,     0.53],
-                                                    [2.361, 1.886, 1]])
+                                       [0.707, 1,     0.53],
+                                       [2.361, 1.886, 1]])
         matrices_list = [voting_matrix_1, voting_matrix_2, voting_matrix_3, voting_matrix_4]
         voting_matrix_aggregated = VotingMatrix.aggregate_matrices(matrices_list)
         self.assertTrue(compare(voting_matrix_aggregated.matrix, true_matrix.matrix))
+
+    def test_ones(self):
+        voting_matrix = VotingMatrix(['_' for _ in range(3)])
+        voting_matrix.matrix = np.array([[1, 1, 1],
+                                         [1, 1, 1],
+                                         [1, 1, 1]])
+        result = voting_matrix.calc_ranking()
+        print(result)
+        self.assertTrue(compare(result, np.array([[0.333, 0.333, 0.333]])))

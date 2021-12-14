@@ -32,16 +32,22 @@ class Results:
         # results
         self.results = {}
         criterion_levels = self.criteria_hierarchy.get_criterion_levels()
+
         for level in sorted(criterion_levels.keys(), reverse=True):
             for criterion_name in criterion_levels[level]:
-                if level == 0:
+                print(criterion_name, list(self.criteria_hierarchy.node_dict[criterion_name].get_children()), "Janusz")
+                if not list(self.criteria_hierarchy.node_dict[criterion_name].get_children()):
                     self.results[criterion_name] = self.rankings[criterion_name]
                 else:
                     node = self.criteria_hierarchy.node_dict[criterion_name]
                     children_names = node.get_children().keys()
-                    children_rankings = [self.rankings[name] for name in children_names]
+                    print(criterion_name)
+                    print(children_names)
+                    children_rankings = [self.rankings[name].T for name in children_names]
+                    print("Children:", children_rankings)
                     matrix = np.concatenate(children_rankings, axis=-1).T
-                    self.results[criterion_name] = matrix * self.rankings[criterion_name]
+                    print("Matrix:", matrix)
+                    self.results[criterion_name] = np.matmul(self.rankings[criterion_name], matrix)
 
     @staticmethod
     def aggregate_rankings(rankings: List[np.ndarray]):
