@@ -2,7 +2,7 @@ from typing import List
 
 import numpy as np
 import pandas as pd
-from sympy import Matrix, pretty
+from sympy import Matrix
 
 RI = {1: 10**-8, 2: 10**-8, 3: 0.58, 4: 0.9, 5: 1.12, 6: 1.21, 7: 1.32, 8: 1.41, 9: 1.46, 10: 1.49}
 
@@ -56,26 +56,34 @@ class VotingMatrix:
         for i in range(self.matrix.shape[0]):
             self.matrix[i, i] = np.count_nonzero(self.matrix[:, i] == 0) + 1
 
-    def __calc_ranking_gmm(self, need_all_values: bool = False) -> np.ndarray:
+    def __calc_ranking_gmm(self) -> np.ndarray:
         """
         Calc matrix GMM ranking based on voter preferences
-        :param need_all_values: if true in matrix cannot be zero values
         :return: np.array of results: 1 - movie1, 2 - movie2
         """
         if np.any(self.matrix == 0):
+            r = np.zeros(self.matrix.shape)
+            r = np.log(self.matrix, where=self.matrix != 0)
+            r = np.sum(r, axis=-1)
             self.__feed_empty_values_gmm()
-        pass
+            w = np.linalg.solve(self.matrix, r)
+            w = np.exp(w)
+            return w/np.sum(w)
+        else:
+            n = self.matrix.shape[-1]
+            geometric_average = np.prod(self.matrix, axis=-1) ** (1 / n)
+            return geometric_average / np.sum(geometric_average)
 
     def __feed_empty_values_gmm(self):
         matrix = np.zeros(self.matrix.shape)
         matrix[self.matrix == 0] = 1
         for i in range(self.matrix.shape[0]):
-            matrix[i, i] = self.matrix.shape[0] - (self.matrix[:, i] == 0).count()
+            matrix[i, i] = self.matrix.shape[0] - np.count_nonzero(self.matrix[:, i] == 0)
         self.matrix = matrix
 
     def calc_inconsistency(self, method: str = "EVM") -> np.array:
         n = self.matrix.shape[-1]
-        cv = np.matmul(self.matrix, self.calc_ranking(method))
+        cv = np.matmul(self.matrix, self.calc_ranking(method).T)
         cv_lambda = np.sum(cv)
         ci = (cv_lambda - n) / (n - 1)
         return ci / RI[n]

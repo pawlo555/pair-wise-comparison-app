@@ -23,8 +23,8 @@ class Expert:
     def get_comparisons(self, criterion) -> pd.DataFrame:
         return self.matrix_dict[criterion].to_dataframe()
 
-    def get_comparison_results(self, criterion_name, method: str = "EVM", need_all_values: bool = False) -> np.array:
-        return self.matrix_dict[criterion_name].calc_ranking(method, need_all_values)
+    def get_comparison_results(self, criterion_name, method: str = "EVM") -> np.array:
+        return self.matrix_dict[criterion_name].calc_ranking(method)
 
     def get_voting_matrix(self, criterion_name: str) -> VotingMatrix:
         return self.matrix_dict[criterion_name]
