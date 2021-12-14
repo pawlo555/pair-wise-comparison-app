@@ -2,6 +2,7 @@ from typing import List
 
 import numpy as np
 import pandas as pd
+from sympy import Matrix, pretty
 
 RI = {1: 10**-8, 2: 10**-8, 3: 0.58, 4: 0.9, 5: 1.12, 6: 1.21, 7: 1.32, 8: 1.41, 9: 1.46, 10: 1.49}
 
@@ -44,12 +45,12 @@ class VotingMatrix:
         """
         if (self.matrix == 0).any():
             self.__feed_empty_values_evm()
-            _, eigenvector = np.linalg.eig(self.matrix)
-            return eigenvector
-        self.__feed_empty_values_evm()
-        _, eigenvector = np.linalg.eig(self.matrix)
-        principal_eigenvector = eigenvector[:, 0]
-        return np.real(principal_eigenvector)
+        sympy_matrix = Matrix(self.matrix)
+        eigenvector = sympy_matrix.eigenvects()
+        principal_eigenvector = np.real(np.array(eigenvector[0][2]))
+        principal_eigenvector = principal_eigenvector[:, :, 0]
+        principal_eigenvector = np.abs(principal_eigenvector)
+        return principal_eigenvector / np.sum(principal_eigenvector)
 
     def __feed_empty_values_evm(self):
         for i in range(self.matrix.shape[0]):

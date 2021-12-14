@@ -18,10 +18,16 @@ class Results:
         self.rankings = {}
         self.inconsistencies = {}
         for criterion_name in self.criteria_hierarchy.criteria_list():
-            aggregated_matrix = VotingMatrix.aggregate_matrices(
-                [expert.get_voting_matrix(criterion_name) for expert in experts])
-            self.rankings[criterion_name] = aggregated_matrix.calc_ranking(method)
-            self.inconsistencies[criterion_name] = aggregated_matrix.calc_inconsistency()
+            matrices = [expert.get_voting_matrix(criterion_name) for expert in experts]
+            if all([np.count_nonzero(matrix == 0) == 0 for matrix in matrices]):  # all data are filled
+                aggregated_matrix = VotingMatrix.aggregate_matrices(matrices)
+                self.rankings[criterion_name] = aggregated_matrix.calc_ranking(method)
+                self.inconsistencies[criterion_name] = aggregated_matrix.calc_inconsistency()
+            else:
+                rankings = [matrix.calc_ranking() for matrix in matrices]
+                self.rankings[criterion_name] = self.aggregate_rankings(rankings)
+                inconsistencies = [matrix.calc_inconsistency for matrix in matrices]
+                self.inconsistencies[criterion_name] = np.mean(np.array(inconsistencies))
 
         # results
         self.results = {}
@@ -36,6 +42,11 @@ class Results:
                     children_rankings = [self.rankings[name] for name in children_names]
                     matrix = np.concatenate(children_rankings, axis=-1).T
                     self.results[criterion_name] = matrix * self.rankings[criterion_name]
+
+    @staticmethod
+    def aggregate_rankings(rankings: List[np.ndarray]):
+        stacked = np.stack(rankings, axis=-1)
+        return np.mean(stacked, axis=-1)
 
     def get_ranking(self, criterion_name: str) -> np.ndarray:
         """
