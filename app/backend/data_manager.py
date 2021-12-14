@@ -17,6 +17,7 @@ class DataManager:
         self.movies_dictionaries = {}
 
         self.experts = {}
+        self.results = None
         self.method_name = "EVM"
         self.api_manager = APIManager()
 
@@ -47,7 +48,8 @@ class DataManager:
         return VALUES
 
     def get_picked_criteria_list(self) -> List[str]:
-        return self.criteria_hierarchy.criteria_list()
+        criteria_list = self.criteria_hierarchy.criteria_list()
+        return criteria_list
 
     def create_complex_criterion(self, name: str, subcriteria: List[str], parent_name: str = "Result"):
         self.criteria_hierarchy.add_node(name, parent_name, subcriteria)
@@ -75,9 +77,7 @@ class DataManager:
         self.method_name = method_name
 
     def calc_results(self):
-        experts_results = {}
-        for expert_name in self.experts.keys():
-            experts_results[expert_name] = Results(self.experts[expert_name])
+        self.results = Results(list(self.experts.keys()))
 
     def get_result_matrix(self, criterion_name: str) -> pd.DataFrame:
         pass

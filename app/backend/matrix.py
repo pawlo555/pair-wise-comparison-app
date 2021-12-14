@@ -108,7 +108,7 @@ class VotingMatrix:
         last_dim = len(matrices)
         matrices = np.stack(matrices, axis=-1)
         matrices = np.power(matrices, 1/last_dim)
-        aggregated_matrix = np.multiply(matrices, axis=-1)
+        aggregated_matrix = np.prod(matrices, axis=-1)
         voting_matrix = VotingMatrix(voting_matrices[0].names)
         voting_matrix.matrix = aggregated_matrix
         return voting_matrix

@@ -32,4 +32,3 @@ class APIManager:
 
 if __name__ == '__main__':
     print(APIManager().fetch_movie("Star Wars"))
-

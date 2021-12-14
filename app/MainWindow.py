@@ -2,12 +2,12 @@ from PyQt6 import QtWidgets
 from PyQt6.QtCore import QSize
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QStackedLayout
 
-from PairWiseComparisonApp.app.backend.data_manager import DataManager
-from PairWiseComparisonApp.app.widgets.ComplexCriteriaAddWidget import ComplexCriteriaAddWidget
-from PairWiseComparisonApp.app.widgets.CriteriaAddWidget import CriteriaAddWidget
-from PairWiseComparisonApp.app.widgets.ExpertAddWidget import ExpertAddWidget
-from PairWiseComparisonApp.app.widgets.MovieAddWidget import MovieAddWidget
-from PairWiseComparisonApp.app.widgets.MoviesRateWidget import MoviesRateWidget
+from app.backend.data_manager import DataManager
+from app.widgets.ComplexCriteriaAddWidget import ComplexCriteriaAddWidget
+from app.widgets.CriteriaAddWidget import CriteriaAddWidget
+from app.widgets.ExpertAddWidget import ExpertAddWidget
+from app.widgets.MovieAddWidget import MovieAddWidget
+from app.widgets.MoviesRateWidget import MoviesRateWidget
 
 
 class MainWindow(QtWidgets.QMainWindow):

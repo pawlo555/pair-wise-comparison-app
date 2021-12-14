@@ -66,7 +66,7 @@ class CriteriaHierarchy:
         :return: Dictionary: level - List of criteria with this level in the tree
         """
         criteria_levels = {}
-        for criterion_name in criteria_levels:
+        for criterion_name in self.node_dict:
             level = self.get_level(criterion_name)
             if level not in criteria_levels.keys():
                 criteria_levels[level] = [criterion_name]
@@ -98,3 +98,6 @@ class TreeNode:
 
     def change_parent(self, new_parent: 'TreeNode') -> None:
         self.__parent = new_parent
+
+    def get_name(self):
+        return self.__name
