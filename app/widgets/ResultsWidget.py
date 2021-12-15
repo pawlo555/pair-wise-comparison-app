@@ -1,22 +1,96 @@
+import pandas as pd
+
 from PyQt6 import QtCore
 from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, QTableWidget, QMessageBox, QTableWidgetItem
 
 
 class ResultsWidget(QWidget):
     """
-        Widget to present results
+        Widget to show results
     """
     def __init__(self, parent, dataManager):
         super().__init__(parent)
 
+        self.pickedCriterion = None
+        self.criterionMatrix = None
+        self.isRendering = False
         self.dataManager = dataManager
+
         self.mainLayout = QVBoxLayout()
+        self.VListLayout = QVBoxLayout()
+        self.VRankingLayout = QVBoxLayout()
+        self.HLayout = QHBoxLayout()
+
         self.mainLayout.addStretch(1)
+        self.VListLayout.addStretch()
+        self.VRankingLayout = QVBoxLayout()
 
         # Title
         titleLabel = QLabel(self)
-        titleLabel.setFont(QFont("SansSerif", 20))
+        titleLabel.setFont(QFont("Arial", 20))
         titleLabel.setText("Results")
         titleLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.mainLayout.addWidget(titleLabel)
+
+        # List of criteria
+        self.criteriaList = QListWidget(self)
+        self.criteriaList.itemClicked.connect(self.criterionChosen)
+        self.VListLayout.addWidget(self.criteriaList)
+
+        self.HLayout.addLayout(self.VListLayout)
+
+        # Ranking info
+        self.rankingInfo = QLabel(self)
+        self.VRankingLayout.addWidget(self.rankingInfo)
+
+        # Ranking Matrix
+        self.rankingMatrix = QTableWidget()
+        self.rankingMatrix.cellChanged.connect(self.updateDF)
+
+        self.VRankingLayout.addWidget(self.rankingMatrix)
+        self.VRankingLayout.addStretch()
+        self.HLayout.addLayout(self.VRankingLayout)
+        self.mainLayout.addLayout(self.HLayout)
+        self.mainLayout.addStretch(2)
+
+        self.setLayout(self.mainLayout)
+
+    def updateLayout(self):
+        criteria_list = self.dataManager.get_picked_criteria_list()
+        for criterion in criteria_list:
+            self.criteriaList.addItem(QListWidgetItem(criterion))
+
+    def criterionChosen(self, item):
+        self.pickedCriterion = item.text()
+        self.updateRanking()
+
+    def updateDF(self, r, c):
+        if self.isRendering:
+            return
+
+        self.rankingMatrix.item(r, c).setText(f"{self.criterionMatrix.iloc[r][c]}")
+        self.renderRankingMatrix()
+
+    def updateRanking(self):
+        if self.pickedCriterion:
+            data = self.dataManager.get_result_matrix(self.pickedCriterion)
+            names = self.dataManager.get_movies_list()
+            self.criterionMatrix = pd.DataFrame(data=data, columns=names, index=[self.pickedCriterion])
+            self.rankingInfo.setText(f"Ranking based on {self.pickedCriterion}")
+            self.renderRankingMatrix()
+
+    def renderRankingMatrix(self):
+        self.isRendering = True
+        w, h = self.criterionMatrix.shape
+        self.rankingMatrix.setRowCount(h)
+        self.rankingMatrix.setColumnCount(w)
+        self.rankingMatrix.setVerticalHeaderLabels(self.criterionMatrix.columns)
+        self.rankingMatrix.setHorizontalHeaderLabels([self.pickedCriterion])
+
+        for c in range(h):
+            for r in range(w):
+                item = QTableWidgetItem()
+                item.setText(f"{self.criterionMatrix.iloc[r][c]}")
+                self.rankingMatrix.setItem(r, c, item)
+        self.isRendering = False

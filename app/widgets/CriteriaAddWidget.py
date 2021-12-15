@@ -58,7 +58,7 @@ class CriteriaAddWidget(QWidget):
         self.renderPickedCriteriaList()
 
     def renderPickedCriteriaList(self):
-        picked_criteria_list = self.dataManager.get_picked_criteria_list()
+        picked_criteria_list = self.dataManager.get_movie_criteria()
         self.pickedCriteria.clear()
 
         for criterion in picked_criteria_list:

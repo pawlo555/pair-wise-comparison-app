@@ -63,5 +63,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def calculationNextLayout(self, method: str):
         self.dataManager.set_method(method)
+        self.dataManager.calc_results()
+        self.resultsWidget.updateLayout()
         self.setNextLayout(7)
 
