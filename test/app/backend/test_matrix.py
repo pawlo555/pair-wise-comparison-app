@@ -1,5 +1,6 @@
 import unittest
 import numpy as np
+import pandas as pd
 
 from app.backend.matrix import VotingMatrix
 
@@ -99,3 +100,12 @@ class TestVotingMatrix(unittest.TestCase):
         result = voting_matrix.calc_ranking()
         print(result)
         self.assertTrue(compare(result, np.array([[0.333, 0.333, 0.333]])))
+
+    def test_to_pandas(self):
+        names_list = ["One", "Two", "Three"]
+        voting_matrix = VotingMatrix(names_list)
+        df = voting_matrix.to_dataframe()
+        print(df)
+        self.assertEqual(set(df.keys()), set(names_list))
+        self.assertEqual(set(df.index), set(names_list))
+        #self.assertEqual(set(df.keys()), set(names_list))

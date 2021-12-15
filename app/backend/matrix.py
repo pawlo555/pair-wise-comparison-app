@@ -20,7 +20,8 @@ class VotingMatrix:
     def __init__(self, names: List[str]):
         self.names = names
         array = np.ones((len(names), len(names)))
-        self.matrix = np.diag(array)
+        self.matrix = np.diag(np.diag(array))
+        print(self.matrix)
 
     def add_comparison(self, x: int, y: int, value: float):
         assert value != 0, "Value cannot be 0"
