@@ -99,3 +99,10 @@ class DataManager:
 
     def get_movie_info(self, movie_name: str) -> Dict[str, str]:
         return self.movies_dictionaries[movie_name]
+
+    def get_movie_criteria(self) -> List[str]:
+        movie_criteria = []
+        for criterion in self.criteria_hierarchy.criteria_list():
+            if not self.criteria_hierarchy.node_dict[criterion].get_children():
+                movie_criteria.append(criterion)
+        return movie_criteria
