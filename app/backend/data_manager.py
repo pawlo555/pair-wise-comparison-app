@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from typing import List
+from typing import List, Dict
 
 from app.backend.expert import Expert
 from app.backend.api_manager import APIManager, VALUES
@@ -96,3 +96,6 @@ class DataManager:
 
     def get_ranking(self, criterion_name: str) -> np.ndarray:
         return self.results.get_ranking(criterion_name)
+
+    def get_movie_info(self, movie_name: str) -> Dict[str, str]:
+        return self.movies_dictionaries[movie_name]
