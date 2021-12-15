@@ -106,3 +106,10 @@ class DataManager:
             if not self.criteria_hierarchy.node_dict[criterion].get_children():
                 movie_criteria.append(criterion)
         return movie_criteria
+
+    def get_complex_criteria(self) -> List[str]:
+        complex_criteria = []
+        for criterion in self.criteria_hierarchy.criteria_list():
+            if self.criteria_hierarchy.node_dict[criterion].get_children():
+                complex_criteria.append(criterion)
+        return complex_criteria
