@@ -22,6 +22,8 @@ class CriteriaHierarchy:
         parent = self.node_dict[parent_name]
         new_node = TreeNode(node_name, parent)
         parent.add_children(new_node)
+        for child in children_names:
+            parent.remove_children(child)
         self.node_dict[node_name] = new_node
         for child_name in children_names:
             child_node = self.node_dict[child_name]
@@ -37,7 +39,7 @@ class CriteriaHierarchy:
             return
         node_to_remove = self.node_dict[node_name]
         parent = node_to_remove.get_parent()
-        parent.remove_children(node_to_remove)
+        parent.remove_children(node_to_remove.get_name())
         children = node_to_remove.get_children()
         for child in children.values():
             parent.add_children(child)
@@ -89,8 +91,8 @@ class TreeNode:
     def add_children(self, child: 'TreeNode') -> None:
         self.children[child.__name] = child
 
-    def remove_children(self, child: 'TreeNode') -> None:
-        self.children.pop(child.__name)
+    def remove_children(self, child: str) -> None:
+        self.children.pop(child)
 
     def get_children(self) -> Dict[str, 'TreeNode']:
         return self.children

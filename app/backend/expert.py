@@ -28,3 +28,6 @@ class Expert:
 
     def get_voting_matrix(self, criterion_name: str) -> VotingMatrix:
         return self.matrix_dict[criterion_name]
+
+    def pass_matrix(self, criterion_name: str, matrix: np.ndarray):
+        self.matrix_dict[criterion_name].matrix = matrix

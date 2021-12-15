@@ -22,11 +22,16 @@ class Results:
             if all([np.count_nonzero(matrix == 0) == 0 for matrix in matrices]):  # all data are filled
                 aggregated_matrix = VotingMatrix.aggregate_matrices(matrices)
                 self.rankings[criterion_name] = aggregated_matrix.calc_ranking(method)
+                print(criterion_name)
+                print(aggregated_matrix.matrix)
                 self.inconsistencies[criterion_name] = aggregated_matrix.calc_inconsistency()
             else:
                 rankings = [matrix.calc_ranking() for matrix in matrices]
                 self.rankings[criterion_name] = self.aggregate_rankings(rankings)
                 inconsistencies = [matrix.calc_inconsistency for matrix in matrices]
+                print(criterion_name)
+                print("Rankings:", rankings.matrix)
+                print(self.aggregate_rankings(rankings))
                 self.inconsistencies[criterion_name] = np.mean(np.array(inconsistencies))
 
         # results
@@ -43,15 +48,16 @@ class Results:
                     children_names = node.get_children().keys()
                     print(criterion_name)
                     print(children_names)
-                    children_rankings = [self.rankings[name].T for name in children_names]
-                    print("Children:", children_rankings)
-                    matrix = np.concatenate(children_rankings, axis=-1).T
+                    children_results = [self.results[name].T for name in children_names]
+                    print("Children:", children_results)
+                    print("Shape:", children_results[0].shape)
+                    matrix = np.concatenate(children_results, axis=-1).T
                     print("Matrix:", matrix)
                     self.results[criterion_name] = np.matmul(self.rankings[criterion_name], matrix)
 
     @staticmethod
     def aggregate_rankings(rankings: List[np.ndarray]):
-        stacked = np.stack(rankings, axis=-1)
+        stacked = np.stack(rankings)
         return np.mean(stacked, axis=-1)
 
     def get_ranking(self, criterion_name: str) -> np.ndarray:
@@ -77,3 +83,13 @@ class Results:
         :return: Result vector for criterion
         """
         return self.results[criterion_name]
+
+
+if __name__ == '__main__':
+    C41 = np.array([[1, 6 / 5, 2 / 3, 5 / 2],
+                    [5 / 6, 1, 5 / 9, 7 / 5],
+                    [3 / 2, 9 / 2, 1, 1],
+                    [2 / 5, 5 / 7, 1, 1]])
+    val, vectors = np.linalg.eig(C41)
+    print(val)
+    print(np.real(vectors[:, 0])/np.sum(np.real(vectors[:, 0])))

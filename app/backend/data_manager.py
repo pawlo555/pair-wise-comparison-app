@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from typing import List
 
 from app.backend.expert import Expert
@@ -11,7 +12,7 @@ class DataManager:
     """
     Class to communicate with frontend
     """
-    def __init__(self):
+    def __init__(self, api=True):
         self.criteria_hierarchy = CriteriaHierarchy()
         self.experts_names = []
         self.movies_dictionaries = {}
@@ -19,18 +20,23 @@ class DataManager:
         self.experts = {}
         self.results = None
         self.method_name = "EVM"
-        self.api_manager = APIManager()
+        self.api_manager = None
+        if api:
+            self.api_manager = APIManager()
 
     def add_movie(self, movie_name: str) -> str:
         """
             Returns dictionary containing data about movie --> APIManager.fetch_movie()
         """
-        dictionary = self.api_manager.fetch_movie(movie_name)
-        if "error" in dictionary.keys():
-            return dictionary
+        if self.api_manager:
+            dictionary = self.api_manager.fetch_movie(movie_name)
+            if "error" in dictionary.keys():
+                return dictionary
+            else:
+                self.movies_dictionaries[dictionary['title']] = dictionary
+                return dictionary
         else:
-            self.movies_dictionaries[dictionary['title']] = dictionary
-            return dictionary
+            return "no_api"
 
     def remove_movie(self, movie_title: str) -> None:
         self.movies_dictionaries.pop(movie_title)
@@ -74,14 +80,20 @@ class DataManager:
     def get_criterion_matrix(self, criterion_name: str, user_name: str):
         self.experts[user_name].get_comparisons(criterion_name)
 
+    def pass_criterion_matrix(self, criterion_name: str, user_name: str, matrix: np.ndarray):
+        self.experts[user_name].pass_matrix(criterion_name, matrix)
+
     def set_method(self, method_name: str = "EVM"):
         self.method_name = method_name
 
     def calc_results(self):
-        self.results = Results(list(self.experts.keys()))
+        self.results = Results(list(self.experts.values()), method=self.method_name)
 
-    def get_result_matrix(self, criterion_name: str) -> pd.DataFrame:
-        pass
+    def get_result_matrix(self, criterion_name: str) -> np.ndarray:
+        return self.results.get_result(criterion_name)
 
-    def get_inconsistency(self, criterion_name: str) -> pd.DataFrame:
-        pass
+    def get_inconsistency(self, criterion_name: str) -> np.ndarray:
+        return self.results.get_inconsistency(criterion_name)
+
+    def get_ranking(self, criterion_name: str) -> np.ndarray:
+        return self.results.get_ranking(criterion_name)

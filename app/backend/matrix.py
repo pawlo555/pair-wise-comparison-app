@@ -44,15 +44,22 @@ class VotingMatrix:
         :return: np.array of results: 1 - movie1, 2 - movie2
         """
         if np.allclose((self.matrix + self.matrix.T) / 2, self.matrix):
+            print("Symmetric matrix")
             return np.ones(shape=(1, self.matrix.shape[0])) / self.matrix.shape[0]
         if (self.matrix == 0).any():
             self.__feed_empty_values_evm()
-        sympy_matrix = Matrix(self.matrix)
-        eigenvector = sympy_matrix.eigenvects()
-        principal_eigenvector = np.abs(np.real(np.array(eigenvector[0][2])))
-        principal_eigenvector = principal_eigenvector[:, :, 0]
-        principal_eigenvector = np.abs(principal_eigenvector)
-        return principal_eigenvector / np.sum(principal_eigenvector)
+
+        val, vectors = np.linalg.eig(self.matrix)
+        print(val)
+        print(vectors)
+        max_val = np.max(val)
+        vectors = np.real(vectors)
+        index = np.where(val == max_val)[0]
+        print("Index:", index)
+        print(vectors[:, index])
+        print("Result:", vectors[:, index] / np.sum(vectors[:, index]))
+        return (vectors[:, index] / np.sum(vectors[:, index])).T
+
 
     def __feed_empty_values_evm(self):
         for i in range(self.matrix.shape[0]):
@@ -64,8 +71,9 @@ class VotingMatrix:
         :return: np.array of results: 1 - movie1, 2 - movie2
         """
         if np.any(self.matrix == 0):
-            r = np.zeros(self.matrix.shape)
-            r = np.log(self.matrix, where=self.matrix != 0)
+            helping = np.copy(self.matrix)
+            helping[helping == 0] = 1
+            r = np.log(helping)
             r = np.sum(r, axis=-1)
             self.__feed_empty_values_gmm()
             w = np.linalg.solve(self.matrix, r)
@@ -73,7 +81,7 @@ class VotingMatrix:
             return w/np.sum(w)
         else:
             n = self.matrix.shape[-1]
-            geometric_average = np.prod(self.matrix, axis=-1) ** (1 / n)
+            geometric_average = np.array([np.prod(self.matrix, axis=-1) ** (1 / n)])
             return geometric_average / np.sum(geometric_average)
 
     def __feed_empty_values_gmm(self):
@@ -85,6 +93,7 @@ class VotingMatrix:
 
     def calc_inconsistency(self, method: str = "EVM") -> np.array:
         n = self.matrix.shape[-1]
+        print("N:", n)
         cv = np.matmul(self.matrix, self.calc_ranking(method).T)
         cv_lambda = np.sum(cv)
         ci = (cv_lambda - n) / (n - 1)
