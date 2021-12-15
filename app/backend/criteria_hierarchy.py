@@ -84,18 +84,28 @@ class TreeNode:
     Class represent single object in CriteriaHierarchy
     """
     def __init__(self, name: str, parent: 'TreeNode'):
+        self.children_names = []  # names to easy in calculating results
         self.children = {}
         self.__parent = parent
         self.__name = name
 
     def add_children(self, child: 'TreeNode') -> None:
         self.children[child.__name] = child
+        self.children_names.append(child.__name)
+        if self.children:
+            print("Children: ", self.__name, self.children_names)
 
     def remove_children(self, child: str) -> None:
         self.children.pop(child)
+        self.children_names.remove(child)
+        if self.children:
+            print("Children: ", self.__name, self.children_names)
 
     def get_children(self) -> Dict[str, 'TreeNode']:
         return self.children
+
+    def get_children_names(self):
+        return self.children_names
 
     def get_parent(self) -> 'TreeNode':
         return self.__parent

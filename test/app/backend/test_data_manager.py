@@ -20,15 +20,13 @@ class TestDataManager(unittest.TestCase):
         manager.add_criterion("purchase price")
         manager.add_criterion("fuel costs")
         manager.add_criterion("maintenance cost")
+        manager.create_complex_criterion("cost", ["purchase price", "fuel costs", "maintenance cost"])
         manager.add_criterion("safety")
         manager.add_criterion("design")
         manager.add_criterion("trunk size")
         manager.add_criterion("passenger capacity")
+        manager.create_complex_criterion("capacity", ["trunk size", "passenger capacity"])
         manager.add_criterion("warranty")
-
-        # complex criteria
-        manager.create_complex_criterion("cost", ["purchase price", "fuel costs", "maintenance cost"])
-        manager.create_complex_criterion("capacity", ["passenger capacity", "trunk size"])
 
         # create expert
         manager.add_expert("Jan")
@@ -62,7 +60,7 @@ class TestDataManager(unittest.TestCase):
         manager.pass_criterion_matrix("trunk size", "Jan", C41)
 
         C51 = np.array([[1,   9,   9,   3/8],
-                        [1/9, 1,   5/9, 1/9],
+                        [1/9, 1,   2/3, 1/9],
                         [1/9, 3/2, 1,   1/9],
                         [8/3, 9,   9,   1]])
         manager.pass_criterion_matrix("passenger capacity", "Jan", C51)
@@ -84,12 +82,12 @@ class TestDataManager(unittest.TestCase):
                         [9, 8/9, 9/7, 1]])
         manager.pass_criterion_matrix("design", "Jan", C32)
 
-        C42 = np.array([[1, 1/3],
-                        [3, 1]])
+        C42 = np.array([[1,   3],
+                        [1/3, 1]])
         manager.pass_criterion_matrix("capacity", "Jan", C42)
 
         C52 = np.array([[1,   9,   4/3, 7/5],
-                        [1/9, 1,   5/9, 1/9],
+                        [1/9, 1,   1/9, 1/9],
                         [3/4, 9,   1,   1/2],
                         [5/7, 9,   2,   1]])
         manager.pass_criterion_matrix("warranty", "Jan", C52)
@@ -106,12 +104,21 @@ class TestDataManager(unittest.TestCase):
         manager.calc_results()
 
         # checks
-        self.assertTrue(compare(manager.get_ranking("purchase price"), np.array([[0.208, 0.226, 0.343, 0.22]]), 0.01))
-        self.assertTrue(compare(manager.get_ranking("fuel costs"), np.array([[0.398, 0.24,  0.213, 0.146]]), 0.01))
-        self.assertTrue(compare(manager.get_ranking("maintenance cost"), np.array([[0.250, 0.279, 0.216, 0.253]]), 0.01))
-        self.assertTrue(compare(manager.get_ranking("trunk size"), np.array([[0.290, 0.211, 0.314, 0.183]]), 0.01))
-        self.assertTrue(compare(manager.get_ranking("passenger capacity"), np.array([[0.341, 0.043, 0.054, 0.563]]), 0.01))
+        self.assertTrue(compare(manager.get_ranking("purchase price"), np.array([[0.208, 0.226, 0.343, 0.22]])))
+        self.assertTrue(compare(manager.get_ranking("fuel costs"), np.array([[0.398, 0.24,  0.213, 0.146]])))
+        self.assertTrue(compare(manager.get_ranking("maintenance cost"), np.array([[0.250, 0.279, 0.216, 0.253]])))
+        self.assertTrue(compare(manager.get_ranking("trunk size"), np.array([[0.290, 0.211, 0.314, 0.183]])))
+        self.assertTrue(compare(manager.get_ranking("passenger capacity"), np.array([[0.341, 0.043, 0.054, 0.563]]), 0.02))
 
-        self.assertTrue(compare(manager.get_ranking("safety"), np.array([[0.041, 0.072, 0.663, 0.221]]), 0.01))
-        self.assertTrue(compare(manager.get_ranking("design"), np.array([[0.032, 0.481, 0.189, 0.259]]), 0.1))
-        self.assertTrue(compare(manager.get_ranking("warranty"), np.array([[0.368, 0.034, 0.248, 0.348]]), 0.05))
+        self.assertTrue(compare(manager.get_ranking("safety"), np.array([[0.041, 0.072, 0.663, 0.221]])))
+        self.assertTrue(compare(manager.get_ranking("design"), np.array([[0.032, 0.481, 0.189, 0.295]])))
+        self.assertTrue(compare(manager.get_ranking("warranty"), np.array([[0.368, 0.034, 0.248, 0.348]])))
+
+        # higher rankings:
+        self.assertTrue(compare(manager.get_ranking("cost"), np.array([[0.776, 0.153, 0.07]])))
+        self.assertTrue(compare(manager.get_ranking("capacity"), np.array([[0.75, 0.25]])))
+
+        self.assertTrue(compare(manager.get_ranking("Result"), np.array([[0.447, 0.193, 0.082, 0.155, 0.12]])))
+
+        # final results:
+        self.assertTrue(compare(manager.get_result_matrix("Result"), np.array([[0.21, 0.188, 0.354, 0.247]])))

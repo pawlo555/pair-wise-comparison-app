@@ -62,7 +62,6 @@ class DataManager:
 
     def add_expert(self, expert_name: str) -> None:
         self.experts_names.append(expert_name)
-        print(self.experts_names)
 
     def delete_expert(self, expert_name: str) -> None:
         self.experts_names.remove(expert_name)
@@ -78,7 +77,7 @@ class DataManager:
             self.experts[expert_name] = Expert(self.criteria_hierarchy, sorted(self.movies_dictionaries.keys()))
 
     def get_criterion_matrix(self, criterion_name: str, user_name: str):
-        self.experts[user_name].get_comparisons(criterion_name)
+        return self.experts[user_name].get_comparisons(criterion_name)
 
     def pass_criterion_matrix(self, criterion_name: str, user_name: str, matrix: np.ndarray):
         self.experts[user_name].pass_matrix(criterion_name, matrix)

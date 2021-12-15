@@ -13,7 +13,7 @@ class Expert:
         self.criteria_hierarchy = criteria_hierarchy
         self.matrix_dict = {}
         for criterion_name in criteria_hierarchy.criteria_list():
-            subcriteria_names = criteria_hierarchy.node_dict.keys()
+            subcriteria_names = criteria_hierarchy.node_dict[criterion_name].get_children_names()
             if not subcriteria_names:
                 self.matrix_dict[criterion_name] = VotingMatrix(movies_names)
             else:

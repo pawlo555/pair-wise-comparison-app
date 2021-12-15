@@ -45,7 +45,7 @@ class Results:
                     self.results[criterion_name] = self.rankings[criterion_name]
                 else:
                     node = self.criteria_hierarchy.node_dict[criterion_name]
-                    children_names = node.get_children().keys()
+                    children_names = node.get_children_names()
                     print(criterion_name)
                     print(children_names)
                     children_results = [self.results[name].T for name in children_names]
