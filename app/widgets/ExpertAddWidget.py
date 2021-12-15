@@ -41,7 +41,7 @@ class ExpertAddWidget(QWidget):
 
         # Next stage button
         self.nextButton = QPushButton("Next stage", self)
-        self.nextButton.clicked.connect(lambda: nextLayoutTrigger(4))
+        self.nextButton.clicked.connect(lambda: nextLayoutTrigger())
         self.mainLayout.addWidget(self.nextButton)
         self.mainLayout.addStretch(2)
 

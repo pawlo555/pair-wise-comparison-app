@@ -56,6 +56,7 @@ class DataManager:
 
     def add_expert(self, expert_name: str) -> None:
         self.experts_names.append(expert_name)
+        print(self.experts_names)
 
     def delete_expert(self, expert_name: str) -> None:
         self.experts_names.remove(expert_name)

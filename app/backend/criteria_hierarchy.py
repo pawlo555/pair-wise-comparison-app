@@ -16,7 +16,9 @@ class CriteriaHierarchy:
         :param parent_name: Name of node who will be parent do added nodes
         :param children_names: List of children names - if children already have a parent it will be replaced
         """
-        assert node_name not in self.node_dict, "Node of name: " + node_name + " is already in use"
+        if node_name in self.node_dict:
+            return
+        # assert node_name not in self.node_dict, "Node of name: " + node_name + " is already in use"
         parent = self.node_dict[parent_name]
         new_node = TreeNode(node_name, parent)
         parent.add_children(new_node)

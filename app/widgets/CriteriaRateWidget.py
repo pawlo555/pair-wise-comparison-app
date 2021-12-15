@@ -1,12 +1,13 @@
 from PyQt6 import QtCore
 from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, \
-    QLineEdit, QTableView, QTableWidget, QMessageBox, QTableWidgetItem
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, QTableWidget, QMessageBox, QTableWidgetItem
+
+# TODO: Change criteria list
 
 
-class MoviesRateWidget(QWidget):
+class CriteriaRateWidget(QWidget):
     """
-        Widget to rate movies by every criteria
+        Widget to rate importance of criteria
     """
     def __init__(self, parent, dataManager, nextLayoutTrigger):
         super().__init__(parent)
@@ -26,7 +27,7 @@ class MoviesRateWidget(QWidget):
         # Title
         titleLabel = QLabel(self)
         titleLabel.setFont(QFont("Arial", 20))
-        titleLabel.setText("Pick criterion to rate movies")
+        titleLabel.setText("Pick criteria to rank their importance")
         titleLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.mainLayout.addWidget(titleLabel)
 
@@ -52,7 +53,7 @@ class MoviesRateWidget(QWidget):
 
         # Next stage button
         self.nextButton = QPushButton("Next stage", self)
-        self.nextButton.clicked.connect(lambda: nextLayoutTrigger())
+        self.nextButton.clicked.connect(lambda: nextLayoutTrigger(6))
         self.mainLayout.addWidget(self.nextButton)
         self.mainLayout.addStretch(2)
 

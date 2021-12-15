@@ -4,58 +4,39 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButt
     QLineEdit, QTableView, QTableWidget, QMessageBox, QTableWidgetItem
 
 
-class MoviesRateWidget(QWidget):
+class CalculationWidget(QWidget):
     """
-        Widget to rate movies by every criteria
+        Widget to calculate ranking
     """
     def __init__(self, parent, dataManager, nextLayoutTrigger):
         super().__init__(parent)
 
-        self.pickedExpert = None
-        self.pickedCriterion = None
-        self.criterionMatrix = None
         self.dataManager = dataManager
 
         self.mainLayout = QVBoxLayout()
-        self.VLayout = QVBoxLayout()
         self.HLayout = QHBoxLayout()
-
-        self.mainLayout.addStretch(1)
-        self.VLayout.addStretch()
+        self.mainLayout.addStretch()
+        self.HLayout.addStretch()
 
         # Title
         titleLabel = QLabel(self)
         titleLabel.setFont(QFont("Arial", 20))
-        titleLabel.setText("Pick criterion to rate movies")
+        titleLabel.setText("Pick ranking method")
         titleLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.mainLayout.addWidget(titleLabel)
 
-        # List of experts
-        self.expertsList = QListWidget(self)
-        self.expertsList.itemClicked.connect(self.expertChosen)
-        self.VLayout.addWidget(self.expertsList)
-
-        # List of criteria
-        self.criteriaList = QListWidget(self)
-        self.criteriaList.itemClicked.connect(self.criterionChosen)
-        self.VLayout.addWidget(self.criteriaList)
-
-        self.HLayout.addLayout(self.VLayout)
-
-        # Ranking Matrix
-        self.rankingMatrix = QTableWidget()
-        movies = self.dataManager.get_movies_list()
-        self.rankingMatrix.setVerticalHeaderLabels(movies)
-        self.rankingMatrix.setHorizontalHeaderLabels(movies)
-        self.HLayout.addWidget(self.rankingMatrix)
-        self.mainLayout.addLayout(self.HLayout)
-
         # Next stage button
-        self.nextButton = QPushButton("Next stage", self)
-        self.nextButton.clicked.connect(lambda: nextLayoutTrigger())
-        self.mainLayout.addWidget(self.nextButton)
-        self.mainLayout.addStretch(2)
+        self.method0 = QPushButton("EVM Method", self)
+        self.method0.clicked.connect(lambda: nextLayoutTrigger("EVM"))
+        self.HLayout.addWidget(self.method0)
 
+        self.method1 = QPushButton("GMM Method", self)
+        self.method1.clicked.connect(lambda: nextLayoutTrigger("GMM"))
+        self.HLayout.addWidget(self.method1)
+
+        self.HLayout.addStretch()
+        self.mainLayout.addLayout(self.HLayout)
+        self.mainLayout.addStretch()
         self.setLayout(self.mainLayout)
 
     def update_layout(self):
