@@ -8,33 +8,36 @@ from app.widgets.CriteriaAddWidget import CriteriaAddWidget
 from app.widgets.ExpertAddWidget import ExpertAddWidget
 from app.widgets.MovieAddWidget import MovieAddWidget
 from app.widgets.MoviesRateWidget import MoviesRateWidget
+from app.widgets.CalculationWidget import CalculationWidget
+from app.widgets.CriteriaRateWidget import CriteriaRateWidget
+from app.widgets.ResultsWidget import ResultsWidget
 
-from PairWiseComparisonApp.app.widgets.CalculationWidget import CalculationWidget
-from PairWiseComparisonApp.app.widgets.CriteriaRateWidget import CriteriaRateWidget
-from PairWiseComparisonApp.app.widgets.ResultsWidget import ResultsWidget
+from app.styling.styles import setAppStylesheet
 
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
 
+        self.setWindowTitle("Kox apka")
+        self.setBaseSize(QSize(640, 480))
+        setAppStylesheet(self)
+
         self.dataManager = DataManager()
 
-        self.setWindowTitle("Kox apka")
-        self.setMinimumSize(QSize(640, 480))
-
         self.centralWidget = QWidget()
+        self.centralWidget.setObjectName("centralWidget")
         self.centralLayout = QHBoxLayout()
 
         # Widgets for stackedLayout - we can swap between them
         self.stackedLayout = QStackedLayout()
-        self.movieAddWidget = MovieAddWidget(self, self.dataManager, self.setNextLayout)
-        self.criteriaAddWidget = CriteriaAddWidget(self, self.dataManager, self.setNextLayout)
-        self.complexCriteriaAddWidget = ComplexCriteriaAddWidget(self, self.dataManager, self.setNextLayout)
-        self.expertAddWidget = ExpertAddWidget(self, self.dataManager, self.expertAddNextLayout)
-        self.moviesRateWidget = MoviesRateWidget(self, self.dataManager, self.rateMoviesNextLayout)
-        self.criteriaRateWidget = CriteriaRateWidget(self, self.dataManager, self.setNextLayout)
-        self.calculationWidget = CalculationWidget(self, self.dataManager, self.calculationNextLayout)
+        self.movieAddWidget = MovieAddWidget(self, self.dataManager, self._setNextLayout)
+        self.criteriaAddWidget = CriteriaAddWidget(self, self.dataManager, self._setNextLayout)
+        self.complexCriteriaAddWidget = ComplexCriteriaAddWidget(self, self.dataManager, self._setNextLayout)
+        self.expertAddWidget = ExpertAddWidget(self, self.dataManager, self._expertAddNextLayout)
+        self.moviesRateWidget = MoviesRateWidget(self, self.dataManager, self._rateMoviesNextLayout)
+        self.criteriaRateWidget = CriteriaRateWidget(self, self.dataManager, self._setNextLayout)
+        self.calculationWidget = CalculationWidget(self, self.dataManager, self._calculationNextLayout)
         self.resultsWidget = ResultsWidget(self, self.dataManager)
 
         self.stackedLayout.addWidget(self.movieAddWidget)
@@ -49,21 +52,21 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self.centralWidget)
         self.centralWidget.setLayout(self.stackedLayout)
 
-    def setNextLayout(self, index: int):
+    def _setNextLayout(self, index: int):
         self.stackedLayout.setCurrentIndex(index)
 
-    def expertAddNextLayout(self):
+    def _expertAddNextLayout(self):
         self.dataManager.initialize_matrices()
         self.moviesRateWidget.update_layout()
-        self.setNextLayout(4)
+        self._setNextLayout(4)
 
-    def rateMoviesNextLayout(self):
+    def _rateMoviesNextLayout(self):
         self.criteriaRateWidget.update_layout()
-        self.setNextLayout(5)
+        self._setNextLayout(5)
 
-    def calculationNextLayout(self, method: str):
+    def _calculationNextLayout(self, method: str):
         self.dataManager.set_method(method)
         self.dataManager.calc_results()
         self.resultsWidget.updateLayout()
-        self.setNextLayout(7)
+        self._setNextLayout(7)
 

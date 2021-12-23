@@ -1,5 +1,4 @@
 from PyQt6 import QtCore, QtGui
-from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox, QSizePolicy, \
     QListWidget, QListWidgetItem
 
@@ -14,13 +13,12 @@ class CriteriaAddWidget(QWidget):
         self.dataManager = dataManager
         self.mainLayout = QVBoxLayout()
         self.tablesLayout = QHBoxLayout()
-        self.mainLayout.addStretch(1)
-        self.tablesLayout.addStretch()
+        # self.mainLayout.addStretch(1)
 
         # Title
         titleLabel = QLabel(self)
-        titleLabel.setFont(QFont("SansSerif", 20))
-        titleLabel.setText("Pick crieteria:")
+        titleLabel.setObjectName("titleLabel")
+        titleLabel.setText("pick something you care about 💕")
         titleLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.mainLayout.addWidget(titleLabel)
 
@@ -38,14 +36,17 @@ class CriteriaAddWidget(QWidget):
         self.pickedCriteria = QListWidget(self)
         self.pickedCriteria.itemClicked.connect(self.pickedCriteriaClicked)
         self.tablesLayout.addWidget(self.pickedCriteria)
-        self.tablesLayout.addStretch()
         self.mainLayout.addLayout(self.tablesLayout)
 
         # Next stage button
-        self.nextButton = QPushButton("Next stage", self)
+        self.nextButton = QPushButton("next stage", self)
         self.nextButton.clicked.connect(lambda: nextLayoutTrigger(2))
-        self.mainLayout.addWidget(self.nextButton)
-        self.mainLayout.addStretch(2)
+        nextButtonLayout = QHBoxLayout()
+        nextButtonLayout.addStretch(1)
+        nextButtonLayout.addWidget(self.nextButton)
+        nextButtonLayout.addStretch(1)
+        self.mainLayout.addLayout(nextButtonLayout)
+        # self.mainLayout.addStretch(2)
 
         self.setLayout(self.mainLayout)
 

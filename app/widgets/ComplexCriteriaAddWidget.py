@@ -1,5 +1,4 @@
 from PyQt6 import QtCore
-from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, \
     QLineEdit
 
@@ -15,14 +14,11 @@ class ComplexCriteriaAddWidget(QWidget):
         self.mainLayout = QVBoxLayout()
         self.VLayout = QVBoxLayout()
         self.HLayout = QHBoxLayout()
-        self.mainLayout.addStretch(1)
-        self.HLayout.addStretch()
-        self.VLayout.addStretch()
 
         # Title
         titleLabel = QLabel(self)
-        titleLabel.setFont(QFont("SansSerif", 20))
-        titleLabel.setText("Pick crieteria to create a new complex criterion:")
+        titleLabel.setObjectName("titleLabel")
+        titleLabel.setText("set own ranking rules 🌞")
         titleLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.mainLayout.addWidget(titleLabel)
 
@@ -39,23 +35,27 @@ class ComplexCriteriaAddWidget(QWidget):
 
         # Create new criterion
         self.inputLabel = QLineEdit(self)
-        self.inputLabel.setText("Type new label...")
+        self.inputLabel.setText("type new label...")
         self.VLayout.addWidget(self.inputLabel)
-
-        self.confirmButton = QPushButton("Create", self)
+        createButtonLayout = QHBoxLayout()
+        createButtonLayout.addStretch()
+        self.confirmButton = QPushButton("create", self)
         self.confirmButton.clicked.connect(self.createComplexCriterion)
-        self.VLayout.addWidget(self.confirmButton)
-        self.VLayout.addStretch()
+        createButtonLayout.addWidget(self.confirmButton)
+        createButtonLayout.addStretch()
+        self.VLayout.addLayout(createButtonLayout)
 
         self.HLayout.addLayout(self.VLayout)
-        self.HLayout.addStretch()
         self.mainLayout.addLayout(self.HLayout)
 
         # Next stage button
-        self.nextButton = QPushButton("Next stage", self)
+        self.nextButton = QPushButton("next stage", self)
         self.nextButton.clicked.connect(lambda: nextLayoutTrigger(3))
-        self.mainLayout.addWidget(self.nextButton)
-        self.mainLayout.addStretch(2)
+        nextButtonLayout = QHBoxLayout()
+        nextButtonLayout.addStretch(1)
+        nextButtonLayout.addWidget(self.nextButton)
+        nextButtonLayout.addStretch(1)
+        self.mainLayout.addLayout(nextButtonLayout)
 
         self.setLayout(self.mainLayout)
 

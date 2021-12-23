@@ -1,7 +1,6 @@
 from PyQt6 import QtCore, QtGui, Qt
-from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox,\
-    QSizePolicy, QListWidget, QListWidgetItem
+    QListWidget, QListWidgetItem
 
 
 class MovieAddWidget(QWidget):
@@ -19,8 +18,8 @@ class MovieAddWidget(QWidget):
 
         # Title
         titleLabel = QLabel(self)
-        titleLabel.setFont(QFont("SansSerif", 20))
-        titleLabel.setText("Type movie title:")
+        titleLabel.setObjectName("titleLabel")
+        titleLabel.setText("🎬 c'mon type some cool movies here 😎")
         titleLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.mainLayout.addWidget(titleLabel)
 
@@ -33,16 +32,20 @@ class MovieAddWidget(QWidget):
         self.inputLayout.addWidget(self.input)
 
         # Input confirmation button
-        self.confirmButton = QPushButton("Add", self)
+        self.confirmButton = QPushButton("add", self)
         self.confirmButton.clicked.connect(self.addMovie)
         self.inputLayout.addWidget(self.confirmButton)
         self.inputLayout.addStretch()
         self.mainLayout.addLayout(self.inputLayout)
 
         # Next stage button
-        self.nextButton = QPushButton("Next stage", self)
+        self.nextButton = QPushButton("next stage", self)
         self.nextButton.clicked.connect(lambda: nextLayoutTrigger(1))
-        self.mainLayout.addWidget(self.nextButton)
+        nextButtonLayout = QHBoxLayout()
+        nextButtonLayout.addStretch(1)
+        nextButtonLayout.addWidget(self.nextButton)
+        nextButtonLayout.addStretch(1)
+        self.mainLayout.addLayout(nextButtonLayout)
         self.mainLayout.addStretch(2)
 
         self.setLayout(self.mainLayout)
@@ -58,12 +61,9 @@ class MovieAddWidget(QWidget):
                 item = QListWidgetItem(movie)
                 self.pickedMovies.addItem(item)
         else:
-            self._showUnknownMovieError()
+            self.showUnknownMovieError()
 
-    def changeStage(self):
-        pass
-
-    def _showUnknownMovieError(self):
+    def showUnknownMovieError(self):
         movieErrorDialog = QMessageBox(self)
         movieErrorDialog.setText("Sorry, we don\'t know this movie :c")
         movieErrorDialog.setWindowTitle("Error")

@@ -1,8 +1,9 @@
 from PyQt6 import QtCore
-from PyQt6.QtGui import QFont
+
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, QTableWidget, QMessageBox, QTableWidgetItem
 
 # TODO: Change criteria list
+from PairWiseComparisonApp.app.widgets.ScrollableLabel import ScrollableLabel
 
 
 class CriteriaRateWidget(QWidget):
@@ -22,14 +23,12 @@ class CriteriaRateWidget(QWidget):
         self.VListLayout = QVBoxLayout()
         self.VRankingLayout = QVBoxLayout()
         self.HLayout = QHBoxLayout()
-
-        self.mainLayout.addStretch(1)
-        self.VListLayout.addStretch()
         self.VRankingLayout = QVBoxLayout()
+
         # Title
         titleLabel = QLabel(self)
-        titleLabel.setFont(QFont("Arial", 20))
-        titleLabel.setText("Pick criteria to rank their importance")
+        titleLabel.setObjectName("titleLabel")
+        titleLabel.setText("criteria rate time ⏱")
         titleLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.mainLayout.addWidget(titleLabel)
 
@@ -46,23 +45,25 @@ class CriteriaRateWidget(QWidget):
         self.HLayout.addLayout(self.VListLayout)
 
         # Ranking info
-        self.rankingInfo = QLabel(self)
-        self.VRankingLayout.addWidget(self.rankingInfo)
+        self.rankingInfo = ScrollableLabel(self)
+        self.VRankingLayout.addWidget(self.rankingInfo, stretch=1)
 
         # Ranking Matrix
         self.rankingMatrix = QTableWidget()
         self.rankingMatrix.cellChanged.connect(self.updateDF)
 
-        self.VRankingLayout.addWidget(self.rankingMatrix)
-        self.VRankingLayout.addStretch()
-        self.HLayout.addLayout(self.VRankingLayout)
+        self.VRankingLayout.addWidget(self.rankingMatrix, stretch=3)
+        self.HLayout.addLayout(self.VRankingLayout, stretch=5)
         self.mainLayout.addLayout(self.HLayout)
 
         # Next stage button
-        self.nextButton = QPushButton("Next stage", self)
+        self.nextButton = QPushButton("next stage", self)
         self.nextButton.clicked.connect(lambda: nextLayoutTrigger(6))
-        self.mainLayout.addWidget(self.nextButton)
-        self.mainLayout.addStretch(2)
+        nextButtonLayout = QHBoxLayout()
+        nextButtonLayout.addStretch(1)
+        nextButtonLayout.addWidget(self.nextButton)
+        nextButtonLayout.addStretch(1)
+        self.mainLayout.addLayout(nextButtonLayout)
 
         self.setLayout(self.mainLayout)
 
@@ -97,10 +98,10 @@ class CriteriaRateWidget(QWidget):
 
     def updateRanking(self):
         if self.pickedCriterion is None or self.pickedExpert is None:
-            self.showNotEnoughDataError()
+            return
         else:
             self.criterionMatrix = self.dataManager.get_criterion_matrix(self.pickedCriterion, self.pickedExpert)
-            self.rankingInfo.setText(f"Expert {self.pickedExpert} ranks {self.pickedCriterion}")
+            self.rankingInfo.setText(f"🧐 expert {self.pickedExpert} ranks {self.pickedCriterion}")
             self.renderRankingMatrix()
 
     def renderRankingMatrix(self):
@@ -117,9 +118,3 @@ class CriteriaRateWidget(QWidget):
                 item.setText(f"{self.criterionMatrix.iloc[r][c]}")
                 self.rankingMatrix.setItem(r, c, item)
         self.isRendering = False
-
-    def showNotEnoughDataError(self):
-        movieErrorDialog = QMessageBox(self)
-        movieErrorDialog.setText("Pick user and criterion before rating")
-        movieErrorDialog.setWindowTitle("Error")
-        movieErrorDialog.show()

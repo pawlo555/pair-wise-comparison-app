@@ -1,7 +1,6 @@
 from PyQt6 import QtCore
-from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, \
-    QLineEdit, QTableView, QTableWidget, QMessageBox, QTableWidgetItem
+    QMessageBox, QTableWidgetItem
 
 
 class CalculationWidget(QWidget):
@@ -20,7 +19,7 @@ class CalculationWidget(QWidget):
 
         # Title
         titleLabel = QLabel(self)
-        titleLabel.setFont(QFont("Arial", 20))
+        titleLabel.setObjectName("titleLabel")
         titleLabel.setText("Pick ranking method")
         titleLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.mainLayout.addWidget(titleLabel)

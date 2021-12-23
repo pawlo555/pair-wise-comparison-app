@@ -1,7 +1,6 @@
 import pandas as pd
 
 from PyQt6 import QtCore
-from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, QTableWidget, QMessageBox, QTableWidgetItem
 
 
@@ -21,15 +20,12 @@ class ResultsWidget(QWidget):
         self.VListLayout = QVBoxLayout()
         self.VRankingLayout = QVBoxLayout()
         self.HLayout = QHBoxLayout()
-
-        self.mainLayout.addStretch(1)
-        self.VListLayout.addStretch()
         self.VRankingLayout = QVBoxLayout()
 
         # Title
         titleLabel = QLabel(self)
-        titleLabel.setFont(QFont("Arial", 20))
-        titleLabel.setText("Results")
+        titleLabel.setObjectName("titleLabel")
+        titleLabel.setText("results 🏆")
         titleLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.mainLayout.addWidget(titleLabel)
 
@@ -49,10 +45,8 @@ class ResultsWidget(QWidget):
         self.rankingMatrix.cellChanged.connect(self.updateDF)
 
         self.VRankingLayout.addWidget(self.rankingMatrix)
-        self.VRankingLayout.addStretch()
         self.HLayout.addLayout(self.VRankingLayout)
         self.mainLayout.addLayout(self.HLayout)
-        self.mainLayout.addStretch(2)
 
         self.setLayout(self.mainLayout)
 
@@ -77,7 +71,7 @@ class ResultsWidget(QWidget):
             data = self.dataManager.get_result_matrix(self.pickedCriterion)
             names = self.dataManager.get_movies_list()
             self.criterionMatrix = pd.DataFrame(data=data, columns=names, index=[self.pickedCriterion])
-            self.rankingInfo.setText(f"Ranking based on {self.pickedCriterion}")
+            self.rankingInfo.setText(f"ranking based on {self.pickedCriterion}")
             self.renderRankingMatrix()
 
     def renderRankingMatrix(self):
@@ -91,6 +85,6 @@ class ResultsWidget(QWidget):
         for c in range(h):
             for r in range(w):
                 item = QTableWidgetItem()
-                item.setText(f"{self.criterionMatrix.iloc[r][c]}")
+                item.setText(f"{round(self.criterionMatrix.iloc[r][c], 3)}")
                 self.rankingMatrix.setItem(r, c, item)
         self.isRendering = False

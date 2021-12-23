@@ -1,14 +1,16 @@
-from PyQt6 import QtCore
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont
+from PyQt6 import QtCore, QtWidgets
+from PyQt6.QtGui import QCursor
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, \
-    QLineEdit, QTableView, QTableWidget, QMessageBox, QTableWidgetItem
+    QTableWidget, QMessageBox, QTableWidgetItem, QSizePolicy, QScrollArea
+
+from PairWiseComparisonApp.app.widgets.ScrollableLabel import ScrollableLabel
 
 
 class MoviesRateWidget(QWidget):
     """
-        Widget to rate movies by every criteria
+        Widget to rate movies by every criterion
     """
+
     def __init__(self, parent, dataManager, nextLayoutTrigger):
         super().__init__(parent)
 
@@ -22,15 +24,12 @@ class MoviesRateWidget(QWidget):
         self.VListLayout = QVBoxLayout()
         self.VRankingLayout = QVBoxLayout()
         self.HLayout = QHBoxLayout()
-
-        self.mainLayout.addStretch(1)
-        self.VListLayout.addStretch()
         self.VRankingLayout = QVBoxLayout()
 
         # Title
         titleLabel = QLabel(self)
-        titleLabel.setFont(QFont("Arial", 20))
-        titleLabel.setText("Pick criterion to rate movies")
+        titleLabel.setObjectName("titleLabel")
+        titleLabel.setText("movie rate time ⏱")
         titleLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.mainLayout.addWidget(titleLabel)
 
@@ -43,28 +42,28 @@ class MoviesRateWidget(QWidget):
         self.criteriaList = QListWidget(self)
         self.criteriaList.itemClicked.connect(self.criterionChosen)
         self.VListLayout.addWidget(self.criteriaList)
-
         self.HLayout.addLayout(self.VListLayout)
 
         # Movies properties
-        self.moviesProperties = QLabel(self)
-        self.moviesProperties.setWordWrap(True)
-        self.VRankingLayout.addWidget(self.moviesProperties)
+        self.moviesProperties = ScrollableLabel(self)
+        self.VRankingLayout.addWidget(self.moviesProperties, stretch=1)
 
         # Ranking Matrix
         self.rankingMatrix = QTableWidget()
         self.rankingMatrix.cellChanged.connect(self.updateDF)
 
-        self.VRankingLayout.addWidget(self.rankingMatrix)
-        self.VRankingLayout.addStretch()
-        self.HLayout.addLayout(self.VRankingLayout)
+        self.VRankingLayout.addWidget(self.rankingMatrix, stretch=3)
+        self.HLayout.addLayout(self.VRankingLayout, stretch=5)
         self.mainLayout.addLayout(self.HLayout)
 
         # Next stage button
-        self.nextButton = QPushButton("Next stage", self)
+        self.nextButton = QPushButton("next stage", self)
         self.nextButton.clicked.connect(lambda: nextLayoutTrigger())
-        self.mainLayout.addWidget(self.nextButton)
-        self.mainLayout.addStretch(2)
+        nextButtonLayout = QHBoxLayout()
+        nextButtonLayout.addStretch(1)
+        nextButtonLayout.addWidget(self.nextButton)
+        nextButtonLayout.addStretch(1)
+        self.mainLayout.addLayout(nextButtonLayout)
 
         self.setLayout(self.mainLayout)
 
@@ -99,10 +98,10 @@ class MoviesRateWidget(QWidget):
 
     def updateRanking(self):
         if self.pickedCriterion is None or self.pickedExpert is None:
-            self.showNotEnoughDataError()
+            return
         else:
             self.criterionMatrix = self.dataManager.get_criterion_matrix(self.pickedCriterion, self.pickedExpert)
-            info = f"Expert {self.pickedExpert} ranks based on {self.pickedCriterion}\n\n"
+            info = f"🧐 expert {self.pickedExpert} ranks based on {self.pickedCriterion}\n\n"
             for movie in self.dataManager.get_movies_list():
                 movieDict = self.dataManager.get_movie_info(movie)
                 info += f"{movie}: {movieDict[self.pickedCriterion]}\n"
@@ -124,9 +123,3 @@ class MoviesRateWidget(QWidget):
                 item.setText(f"{self.criterionMatrix.iloc[r][c]}")
                 self.rankingMatrix.setItem(r, c, item)
         self.isRendering = False
-
-    def showNotEnoughDataError(self):
-        movieErrorDialog = QMessageBox(self)
-        movieErrorDialog.setText("Pick user and criterion before rating")
-        movieErrorDialog.setWindowTitle("Error")
-        movieErrorDialog.show()
