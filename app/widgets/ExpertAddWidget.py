@@ -1,12 +1,13 @@
 from PyQt6 import QtCore
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox, QSizePolicy, \
-    QListWidget, QListWidgetItem
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QLineEdit, QPushButton, QListWidget, \
+    QListWidgetItem
 
 
 class ExpertAddWidget(QWidget):
     """
         Widget to add new expert
     """
+
     def __init__(self, parent, dataManager, nextLayoutTrigger):
         super().__init__(parent)
 
@@ -57,5 +58,3 @@ class ExpertAddWidget(QWidget):
         for expert in expertsList:
             item = QListWidgetItem(expert)
             self.expertsList.addItem(item)
-
-

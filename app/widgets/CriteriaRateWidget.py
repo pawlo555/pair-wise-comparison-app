@@ -1,6 +1,6 @@
 from PyQt6 import QtCore
-
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, QTableWidget, QMessageBox, QTableWidgetItem
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, \
+    QTableWidget, QTableWidgetItem
 
 # TODO: Change criteria list
 from PairWiseComparisonApp.app.widgets.ScrollableLabel import ScrollableLabel
@@ -10,6 +10,7 @@ class CriteriaRateWidget(QWidget):
     """
         Widget to rate importance of criteria
     """
+
     def __init__(self, parent, dataManager, nextLayoutTrigger):
         super().__init__(parent)
 

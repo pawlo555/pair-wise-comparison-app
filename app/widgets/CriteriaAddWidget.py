@@ -1,12 +1,12 @@
-from PyQt6 import QtCore, QtGui
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox, QSizePolicy, \
-    QListWidget, QListWidgetItem
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QListWidget, QListWidgetItem
 
 
 class CriteriaAddWidget(QWidget):
     """
         Widget to add new criteria
     """
+
     def __init__(self, parent, dataManager, nextLayoutTrigger):
         super().__init__(parent)
 
@@ -40,7 +40,7 @@ class CriteriaAddWidget(QWidget):
 
         # Next stage button
         self.nextButton = QPushButton("next stage", self)
-        self.nextButton.clicked.connect(lambda: nextLayoutTrigger(2))
+        self.nextButton.clicked.connect(lambda: nextLayoutTrigger())
         nextButtonLayout = QHBoxLayout()
         nextButtonLayout.addStretch(1)
         nextButtonLayout.addWidget(self.nextButton)
@@ -64,4 +64,3 @@ class CriteriaAddWidget(QWidget):
 
         for criterion in picked_criteria_list:
             self.pickedCriteria.addItem(QListWidgetItem(criterion))
-

@@ -1,4 +1,5 @@
 from typing import Dict
+
 from imdb import IMDb
 
 VALUES = ['title', 'year', 'kind', 'plot outline', 'directors', 'rating', 'languages', 'full-size cover url', 'cast']

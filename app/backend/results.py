@@ -1,6 +1,6 @@
-import numpy as np
 from typing import List
 
+import numpy as np
 from app.backend.expert import Expert
 from app.backend.matrix import VotingMatrix
 

@@ -1,8 +1,7 @@
 import numpy as np
 import pandas as pd
-
-from app.backend.matrix import VotingMatrix
 from app.backend.criteria_hierarchy import CriteriaHierarchy
+from app.backend.matrix import VotingMatrix
 
 
 class Expert:

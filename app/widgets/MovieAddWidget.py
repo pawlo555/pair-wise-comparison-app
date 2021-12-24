@@ -1,5 +1,5 @@
-from PyQt6 import QtCore, QtGui, Qt
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox,\
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox, \
     QListWidget, QListWidgetItem
 
 
@@ -7,6 +7,7 @@ class MovieAddWidget(QWidget):
     """
         Widget to add new movies to movies list
     """
+
     def __init__(self, parent, dataManager, nextLayoutTrigger):
         super().__init__(parent)
 
@@ -68,4 +69,3 @@ class MovieAddWidget(QWidget):
         movieErrorDialog.setText("Sorry, we don\'t know this movie :c")
         movieErrorDialog.setWindowTitle("Error")
         movieErrorDialog.show()
-

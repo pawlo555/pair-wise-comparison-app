@@ -1,7 +1,6 @@
-from PyQt6 import QtCore, QtWidgets
-from PyQt6.QtGui import QCursor
+from PyQt6 import QtCore
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, \
-    QTableWidget, QMessageBox, QTableWidgetItem, QSizePolicy, QScrollArea
+    QTableWidget, QTableWidgetItem
 
 from PairWiseComparisonApp.app.widgets.ScrollableLabel import ScrollableLabel
 

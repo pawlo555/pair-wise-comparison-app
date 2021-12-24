@@ -1,12 +1,13 @@
 from PyQt6 import QtCore
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, \
-    QLineEdit
+    QLineEdit, QAbstractItemView
 
 
 class ComplexCriteriaAddWidget(QWidget):
     """
         Widget to create complex criteria
     """
+
     def __init__(self, parent, dataManager, nextLayoutTrigger):
         super().__init__(parent)
 
@@ -24,13 +25,7 @@ class ComplexCriteriaAddWidget(QWidget):
 
         # List of all criteria
         self.allCriteria = QListWidget(self)
-        # TODO: selection mode to enable multiple choice
-        # self.allCriteria.setSelectionModel(2)
-
-        criteria_list = self.dataManager.get_all_criteria_list()
-        for criterion in criteria_list:
-            self.allCriteria.addItem(QListWidgetItem(criterion))
-
+        self.allCriteria.setSelectionMode(QAbstractItemView.SelectionMode.MultiSelection)
         self.HLayout.addWidget(self.allCriteria)
 
         # Create new criterion
@@ -59,16 +54,20 @@ class ComplexCriteriaAddWidget(QWidget):
 
         self.setLayout(self.mainLayout)
 
+    # TODO: nie można zrobić complex criterion z innego complex criterion
     def createComplexCriterion(self):
         name = self.inputLabel.text()
         items = self.allCriteria.selectedItems()
-        self.dataManager.create_complex_criterion(name, items)
+        items_names = [item.text() for item in items]
+        self.dataManager.create_complex_criterion(name, items_names)
+        self.renderCriteriaList()
 
     def renderCriteriaList(self):
-        criteria_list = self.dataManager.get_all_criteria_list()
+        criteria_list = self.dataManager.get_picked_criteria_list()
         self.allCriteria.clear()
 
         for criterion in criteria_list:
             self.allCriteria.addItem(QListWidgetItem(criterion))
 
-
+    def update_layout(self):
+        self.renderCriteriaList()

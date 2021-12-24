@@ -1,13 +1,15 @@
 import pandas as pd
 
 from PyQt6 import QtCore
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, QTableWidget, QMessageBox, QTableWidgetItem
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QListWidget, QListWidgetItem, QTableWidget, \
+    QTableWidgetItem
 
 
 class ResultsWidget(QWidget):
     """
         Widget to show results
     """
+
     def __init__(self, parent, dataManager):
         super().__init__(parent)
 

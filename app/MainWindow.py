@@ -1,18 +1,16 @@
 from PyQt6 import QtWidgets
 from PyQt6.QtCore import QSize
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QStackedLayout
-
 from app.backend.data_manager import DataManager
+from app.styling.styles import setAppStylesheet
+from app.widgets.CalculationWidget import CalculationWidget
 from app.widgets.ComplexCriteriaAddWidget import ComplexCriteriaAddWidget
 from app.widgets.CriteriaAddWidget import CriteriaAddWidget
+from app.widgets.CriteriaRateWidget import CriteriaRateWidget
 from app.widgets.ExpertAddWidget import ExpertAddWidget
 from app.widgets.MovieAddWidget import MovieAddWidget
 from app.widgets.MoviesRateWidget import MoviesRateWidget
-from app.widgets.CalculationWidget import CalculationWidget
-from app.widgets.CriteriaRateWidget import CriteriaRateWidget
 from app.widgets.ResultsWidget import ResultsWidget
-
-from app.styling.styles import setAppStylesheet
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -20,7 +18,7 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__()
 
         self.setWindowTitle("Kox apka")
-        self.setBaseSize(QSize(640, 480))
+        self.setBaseSize(QSize(640, 210))
         setAppStylesheet(self)
 
         self.dataManager = DataManager()
@@ -32,7 +30,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # Widgets for stackedLayout - we can swap between them
         self.stackedLayout = QStackedLayout()
         self.movieAddWidget = MovieAddWidget(self, self.dataManager, self._setNextLayout)
-        self.criteriaAddWidget = CriteriaAddWidget(self, self.dataManager, self._setNextLayout)
+        self.criteriaAddWidget = CriteriaAddWidget(self, self.dataManager, self._criteriaAddNextLayout)
         self.complexCriteriaAddWidget = ComplexCriteriaAddWidget(self, self.dataManager, self._setNextLayout)
         self.expertAddWidget = ExpertAddWidget(self, self.dataManager, self._expertAddNextLayout)
         self.moviesRateWidget = MoviesRateWidget(self, self.dataManager, self._rateMoviesNextLayout)
@@ -54,6 +52,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def _setNextLayout(self, index: int):
         self.stackedLayout.setCurrentIndex(index)
+
+    def _criteriaAddNextLayout(self):
+        self.complexCriteriaAddWidget.update_layout()
+        self._setNextLayout(2)
 
     def _expertAddNextLayout(self):
         self.dataManager.initialize_matrices()

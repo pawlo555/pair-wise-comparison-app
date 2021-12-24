@@ -1,10 +1,9 @@
-import pandas as pd
-import numpy as np
 from typing import List, Dict
 
-from app.backend.expert import Expert
+import numpy as np
 from app.backend.api_manager import APIManager, VALUES
 from app.backend.criteria_hierarchy import CriteriaHierarchy
+from app.backend.expert import Expert
 from app.backend.results import Results
 
 

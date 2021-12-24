@@ -2,7 +2,6 @@ from typing import List
 
 import numpy as np
 import pandas as pd
-from sympy import Matrix
 
 RI = {1: 10**-8, 2: 10**-8, 3: 0.58, 4: 0.9, 5: 1.12, 6: 1.21, 7: 1.32, 8: 1.41, 9: 1.46, 10: 1.49}
 
