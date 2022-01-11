@@ -10,7 +10,6 @@ class APIManager:
         self.imdb = IMDb()
 
     def fetch_movie(self, title: str):
-        #print(self.imdb.get_movie_infoset())
         try:
             result = self.imdb.search_movie(title)
             movie_dictionary = self.compose_dictionary(result[0].getID())

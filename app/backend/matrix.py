@@ -84,8 +84,16 @@ class VotingMatrix:
             matrix[i, i] = self.matrix.shape[0] - np.count_nonzero(self.matrix[:, i] == 0)
         self.matrix = matrix
 
-    def calc_inconsistency(self, method: str = "EVM") -> np.array:
+    # TODO add second method
+    def calc_inconsistency(self, method: str = "EVM") -> float:
+        """
+        Calculate matrix inconsistency
+        :param method: Method of calculating an inconsistency: EVM or
+        :return: inconsistency value
+        """
         n = self.matrix.shape[-1]
+        if n == 1:
+            return 0
         cv = np.matmul(self.matrix, self.calc_ranking(method).T)
         cv_lambda = np.sum(cv)
         ci = (cv_lambda - n) / (n - 1)
@@ -99,19 +107,3 @@ class VotingMatrix:
 
     def get_filled_dataframe(self, filled_df: pd.DataFrame):
         self.matrix = filled_df.to_numpy()
-
-    @staticmethod
-    def aggregate_matrices(voting_matrices: List['VotingMatrix']) -> 'VotingMatrix':
-        """
-        Perform aggregation of matrices using geometric average in order to aggregate different experts
-        :param voting_matrices: List of voting matrices
-        :return: Aggregated matrix
-        """
-        matrices = [voting_matrix.matrix for voting_matrix in voting_matrices]
-        last_dim = len(matrices)
-        matrices = np.stack(matrices, axis=-1)
-        matrices = np.power(matrices, 1/last_dim)
-        aggregated_matrix = np.prod(matrices, axis=-1)
-        voting_matrix = VotingMatrix(voting_matrices[0].names)
-        voting_matrix.matrix = aggregated_matrix
-        return voting_matrix

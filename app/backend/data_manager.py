@@ -16,7 +16,7 @@ class DataManager:
         self.experts_names = []
         self.movies_dictionaries = {}
 
-        self.experts = {}
+        self.experts: Dict[str: Expert] = {}
         self.results = None
         self.method_name = "EVM"
         self.api_manager = None
@@ -73,7 +73,8 @@ class DataManager:
         Use after all movies, criteria and experts all selected - initialize all matrices
         """
         for expert_name in self.experts_names:
-            self.experts[expert_name] = Expert(self.criteria_hierarchy, sorted(self.movies_dictionaries.keys()))
+            self.experts[expert_name] = Expert(expert_name, self.criteria_hierarchy,
+                                               sorted(self.movies_dictionaries.keys()))
 
     def get_criterion_matrix(self, criterion_name: str, user_name: str):
         return self.experts[user_name].get_comparisons(criterion_name)
@@ -81,20 +82,26 @@ class DataManager:
     def pass_criterion_matrix(self, criterion_name: str, user_name: str, matrix: np.ndarray):
         self.experts[user_name].pass_matrix(criterion_name, matrix)
 
-    def set_method(self, method_name: str = "EVM"):
+    def set_method(self, method_name: str = "EVM") -> None:
+        """
+        Sets method of calculating result matrix.
+        :param method_name: Name of method choose between EVM and GMM.
+        """
         self.method_name = method_name
 
     def calc_results(self):
         self.results = Results(list(self.experts.values()), method=self.method_name)
 
-    def get_result_matrix(self, criterion_name: str) -> np.ndarray:
-        return self.results.get_result(criterion_name)
+    def get_result_matrix(self, criterion_name: str, expert_name: str = None) -> np.ndarray:
+        return self.results.get_result(criterion_name, expert_name)
 
-    def get_inconsistency(self, criterion_name: str) -> np.ndarray:
-        return self.results.get_inconsistency(criterion_name)
+    # add user inconsistency
+    def get_inconsistency(self, criterion_name: str, expert_name) -> np.ndarray:
+        assert expert_name in self.experts.keys(), "There is no such expert"
+        return self.results.get_inconsistency(criterion_name, expert_name)
 
-    def get_ranking(self, criterion_name: str) -> np.ndarray:
-        return self.results.get_ranking(criterion_name)
+    def get_ranking(self, criterion_name: str, expert_name: str = None) -> np.ndarray:
+        return self.results.get_ranking(criterion_name, expert_name)
 
     def get_movie_info(self, movie_name: str) -> Dict[str, str]:
         return self.movies_dictionaries[movie_name]

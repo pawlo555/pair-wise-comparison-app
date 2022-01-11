@@ -8,7 +8,9 @@ class Expert:
     """
     Saves information about expert preferences
     """
-    def __init__(self, criteria_hierarchy: CriteriaHierarchy, movies_names):
+    def __init__(self, name, criteria_hierarchy: CriteriaHierarchy, movies_names):
+
+        self.name = name
         self.criteria_hierarchy = criteria_hierarchy
         self.matrix_dict = {}
         for criterion_name in criteria_hierarchy.criteria_list():

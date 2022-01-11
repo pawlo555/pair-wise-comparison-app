@@ -1,95 +1,60 @@
-from typing import List
+from typing import List, Dict
 
 import numpy as np
 from app.backend.expert import Expert
-from app.backend.matrix import VotingMatrix
+from app.backend.expert_results import ExpertResults
+from app.backend.aggreagated_results import AggregatedResults
 
 
 class Results:
     """
-    Class responsible for creating and storing results, for each category we can get:
-        - inconsistency index
-        - results for movies
-        - matrix ranking (for basic criteria this two are the same)
+    Class responsible for creating and storing personal and aggregated results, for each category we can get:
+        - inconsistency index - for specified expert and criterion
+        - results for movies - for specified expert and criterion or for criterion aggregated for all experts
+        - matrix ranking (for basic criteria this two are the same) - for specified experts and criterion or aggregated
+            for all experts
     """
 
     def __init__(self, experts: List[Expert], method: str = "EVM") -> None:
-        self.criteria_hierarchy = experts[0].criteria_hierarchy
-        self.rankings = {}
-        self.inconsistencies = {}
-        for criterion_name in self.criteria_hierarchy.criteria_list():
-            matrices = [expert.get_voting_matrix(criterion_name) for expert in experts]
-            if all([np.count_nonzero(matrix == 0) == 0 for matrix in matrices]):  # all data are filled
-                aggregated_matrix = VotingMatrix.aggregate_matrices(matrices)
-                self.rankings[criterion_name] = aggregated_matrix.calc_ranking(method)
-                print(criterion_name)
-                print(aggregated_matrix.matrix)
-                self.inconsistencies[criterion_name] = aggregated_matrix.calc_inconsistency()
-            else:
-                rankings = [matrix.calc_ranking() for matrix in matrices]
-                self.rankings[criterion_name] = self.aggregate_rankings(rankings)
-                inconsistencies = [matrix.calc_inconsistency for matrix in matrices]
-                print(criterion_name)
-                print("Rankings:", rankings.matrix)
-                print(self.aggregate_rankings(rankings))
-                self.inconsistencies[criterion_name] = np.mean(np.array(inconsistencies))
+        """
+        Calculate all results for the give experts and method
+        :param experts: List of Experts
+        :param method: Method of calculating ranking EVM and GMM is available
+        """
+        self.__aggregated_results = AggregatedResults(experts, method)
+        self.__individual_results: Dict[str: ExpertResults] = {}
+        for expert in experts:
+            self.__individual_results[expert.name] = ExpertResults(expert, method)
 
-        # results
-        self.results = {}
-        criterion_levels = self.criteria_hierarchy.get_criterion_levels()
-
-        for level in sorted(criterion_levels.keys(), reverse=True):
-            for criterion_name in criterion_levels[level]:
-                print(criterion_name, list(self.criteria_hierarchy.node_dict[criterion_name].get_children()), "Janusz")
-                if not list(self.criteria_hierarchy.node_dict[criterion_name].get_children()):
-                    self.results[criterion_name] = self.rankings[criterion_name]
-                else:
-                    node = self.criteria_hierarchy.node_dict[criterion_name]
-                    children_names = node.get_children_names()
-                    print(criterion_name)
-                    print(children_names)
-                    children_results = [self.results[name].T for name in children_names]
-                    print("Children:", children_results)
-                    print("Shape:", children_results[0].shape)
-                    matrix = np.concatenate(children_results, axis=-1).T
-                    print("Matrix:", matrix)
-                    self.results[criterion_name] = np.matmul(self.rankings[criterion_name], matrix)
-
-    @staticmethod
-    def aggregate_rankings(rankings: List[np.ndarray]):
-        stacked = np.stack(rankings)
-        return np.mean(stacked, axis=-1)
-
-    def get_ranking(self, criterion_name: str) -> np.ndarray:
+    def get_ranking(self, criterion_name: str, expert_name: str = None) -> np.ndarray:
         """
         Get the ranking vector for criterion
         :param criterion_name: Name of criterion
+        :param expert_name: Name of expert if None method will return aggregated results
         :return: Ranking vector for criterion
         """
-        return self.rankings[criterion_name]
+        if expert_name:
+            return self.__individual_results[expert_name].get_ranking(criterion_name)
+        else:
+            return self.__aggregated_results.get_ranking(criterion_name)
 
-    def get_inconsistency(self, criterion_name: str) -> float:
+    def get_inconsistency(self, criterion_name: str, expert_name: str) -> float:
         """
         Get matrix inconsistency for selected criterion
+        :param expert_name: Name of the expert to take matrices for
         :param criterion_name: Name of criterion
         :return: Inconsistency of matrix
         """
-        return self.inconsistencies[criterion_name]
+        return self.__individual_results[expert_name].get_inconsistency(criterion_name)
 
-    def get_result(self, criterion_name: str) -> np.ndarray:
+    def get_result(self, criterion_name: str, expert_name: str = None) -> np.ndarray:
         """
         Get the result vector for criterion
         :param criterion_name: Name of criterion
+        :param expert_name: Name of expert if None method will return aggregated results
         :return: Result vector for criterion
         """
-        return self.results[criterion_name]
-
-
-if __name__ == '__main__':
-    C41 = np.array([[1, 6 / 5, 2 / 3, 5 / 2],
-                    [5 / 6, 1, 5 / 9, 7 / 5],
-                    [3 / 2, 9 / 2, 1, 1],
-                    [2 / 5, 5 / 7, 1, 1]])
-    val, vectors = np.linalg.eig(C41)
-    print(val)
-    print(np.real(vectors[:, 0])/np.sum(np.real(vectors[:, 0])))
+        if expert_name:
+            return self.__individual_results[expert_name].get_results(criterion_name)
+        else:
+            return self.__aggregated_results.get_results(criterion_name)

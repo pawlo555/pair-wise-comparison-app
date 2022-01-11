@@ -1,7 +1,6 @@
 import numpy as np
 import unittest
 
-from app.backend.matrix import VotingMatrix
 from app.backend.expert import Expert
 from app.backend.criteria_hierarchy import CriteriaHierarchy
 from app.backend.results import Results
@@ -16,7 +15,7 @@ class TestResults(unittest.TestCase):
         for i in range(1, 9):
             print(str(i))
             criteria_hierarchy.add_node(node_name=str(i), parent_name='Result', children_names=[])
-        expert = Expert(criteria_hierarchy=criteria_hierarchy, movies_names=[str(i) for i in range(1, 9)])
+        expert = Expert('Paweł', criteria_hierarchy=criteria_hierarchy, movies_names=[str(i) for i in range(1, 9)])
         criteria_hierarchy.criteria_list()
 
         expert.get_voting_matrix("1").matrix = np.array([[1, 1/7, 1/5],
@@ -61,7 +60,7 @@ class TestResults(unittest.TestCase):
                                                               [1/2, 3,   5,   2,   7, 5,   5,   1]])
 
         results = Results([expert], method="EVM")
-        print(results.rankings['1'])
+        print(results.get_ranking('1'))
         print(results.get_result('Result'))
         self.assertTrue(compare(results.get_result('1'), np.array([[0.072, 0.649, 0.279]])))
         self.assertTrue(compare(results.get_result('2'), np.array([[0.743, 0.194, 0.063]])))

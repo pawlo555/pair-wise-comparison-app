@@ -66,6 +66,5 @@ class TestTreeNode(unittest.TestCase):
         self.assertEqual(hierarchy.node_dict['fuel cost'].get_parent(), hierarchy.node_dict["cost"])
 
 
-
 if __name__ == '__main__':
     unittest.main()

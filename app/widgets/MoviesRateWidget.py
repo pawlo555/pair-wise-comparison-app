@@ -2,7 +2,7 @@ from PyQt6 import QtCore
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButton, QListWidget, QListWidgetItem, \
     QTableWidget, QTableWidgetItem
 
-from PairWiseComparisonApp.app.widgets.ScrollableLabel import ScrollableLabel
+from app.widgets.ScrollableLabel import ScrollableLabel
 
 
 class MoviesRateWidget(QWidget):

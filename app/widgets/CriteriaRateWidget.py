@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QPushButt
     QTableWidget, QTableWidgetItem
 
 # TODO: Change criteria list
-from PairWiseComparisonApp.app.widgets.ScrollableLabel import ScrollableLabel
+from app.widgets.ScrollableLabel import ScrollableLabel
 
 
 class CriteriaRateWidget(QWidget):
