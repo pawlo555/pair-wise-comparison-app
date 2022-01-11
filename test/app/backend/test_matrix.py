@@ -65,8 +65,6 @@ class TestVotingMatrix(unittest.TestCase):
                                          [1/4, 1/5, 1/8, 1/8, 1/2, 1/2, 1]])
         self.assertTrue(voting_matrix.calc_inconsistency()-0.53 < 0.01)
 
-
-
     def test_ones(self):
         voting_matrix = VotingMatrix(['_' for _ in range(3)])
         voting_matrix.matrix = np.array([[1, 1, 1],
@@ -75,6 +73,15 @@ class TestVotingMatrix(unittest.TestCase):
         result = voting_matrix.calc_ranking()
         print(result)
         self.assertTrue(compare(result, np.array([[0.333, 0.333, 0.333]])))
+
+    def test_golden_wang(self):
+        voting_matrix = VotingMatrix(['_' for _ in range(4)])
+        voting_matrix.matrix = np.array([[1,   4, 1/3, 1/4],
+                                         [1/4, 1, 1/4, 1],
+                                         [3,   4, 1,   1/4],
+                                         [4,   1, 4,   1]])
+        inconsistency = voting_matrix.calc_inconsistency("GMM")
+        self.assertAlmostEqual(0.52, inconsistency, 2)
 
     def test_to_pandas(self):
         names_list = ["One", "Two", "Three"]

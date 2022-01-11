@@ -84,20 +84,42 @@ class VotingMatrix:
             matrix[i, i] = self.matrix.shape[0] - np.count_nonzero(self.matrix[:, i] == 0)
         self.matrix = matrix
 
-    # TODO add second method
     def calc_inconsistency(self, method: str = "EVM") -> float:
         """
         Calculate matrix inconsistency
-        :param method: Method of calculating an inconsistency: EVM or
+        :param method: Method of calculating an inconsistency: EVM or GMM
         :return: inconsistency value
+        """
+        if method == "EVM":
+            return self.__calc_RI()
+        else:
+            return self.__calc_GW()
+
+    def __calc_RI(self) -> float:
+        """
+        Calc inconsistency ratio
+        :return: inconsistency ratio for specified matrix
         """
         n = self.matrix.shape[-1]
         if n == 1:
             return 0
-        cv = np.matmul(self.matrix, self.calc_ranking(method).T)
+        cv = np.matmul(self.matrix, self.__calc_ranking_evm().T)
         cv_lambda = np.sum(cv)
         ci = (cv_lambda - n) / (n - 1)
         return ci / RI[n]
+
+    def __calc_GW(self) -> float:
+        """
+        Calc Golden-Wang index
+        :return: Golden-Wang index
+        """
+        n = self.matrix.shape[-1]
+        c_sharp = self.matrix / np.sum(self.matrix, axis=0)
+        ranking = self.__calc_ranking_gmm()
+        rankings = [ranking for _ in range(4)]
+        rankings = np.concatenate(rankings)
+        ratio = np.abs(c_sharp - rankings.T)
+        return np.sum(ratio) / n
 
     def to_dataframe(self) -> pd.DataFrame:
         """
