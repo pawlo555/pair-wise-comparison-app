@@ -15,11 +15,10 @@ class ExpertResults:
         - matrix ranking for selected criterion (for basic criteria this two are the same)
     """
 
-    def __init__(self, expert: Expert, inconsistency_method: str, ranking_method: str = "EVM"):
+    def __init__(self, expert: Expert, ranking_method: str = "EVM"):
         """
         Initialize results for selected Expert
         :param expert: Expert used to calculated results
-        :param inconsistency_method: method of counting inconsistency
         :param ranking_method: method of calculating a ranking - EVM and GMM is possible
         """
         self.__rankings: Dict[str, np.ndarray] = {}
@@ -30,7 +29,7 @@ class ExpertResults:
         for criterion_name in criteria_hierarchy.criteria_list():
             self.__rankings[criterion_name] = expert.get_voting_matrix(criterion_name).calc_ranking(ranking_method)
             self.__inconsistency[criterion_name] = expert.get_voting_matrix(criterion_name).calc_inconsistency(
-                inconsistency_method)
+                ranking_method)
 
         self.__results = calc_results(self.__rankings, criteria_hierarchy)
 
