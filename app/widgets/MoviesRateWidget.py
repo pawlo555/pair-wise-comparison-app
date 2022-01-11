@@ -78,7 +78,7 @@ class MoviesRateWidget(QWidget):
         self.criterionMatrix.iloc[c][r] = round(1 / float(self.rankingMatrix.item(r, c).text()), 3)
         self.renderRankingMatrix()
 
-    def update_layout(self):
+    def updateLayout(self):
         criteria_list = self.dataManager.get_movie_criteria()
         for criterion in criteria_list:
             self.criteriaList.addItem(QListWidgetItem(criterion))
@@ -105,7 +105,6 @@ class MoviesRateWidget(QWidget):
                 movieDict = self.dataManager.get_movie_info(movie)
                 info += f"{movie}: {movieDict[self.pickedCriterion]}\n"
             self.moviesProperties.setText(info)
-
             self.renderRankingMatrix()
 
     def renderRankingMatrix(self):

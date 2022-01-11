@@ -68,7 +68,7 @@ class CriteriaRateWidget(QWidget):
 
         self.setLayout(self.mainLayout)
 
-    def update_layout(self):
+    def updateLayout(self):
         criteria_list = self.dataManager.get_complex_criteria()
         for criterion in criteria_list:
             self.criteriaList.addItem(QListWidgetItem(criterion))

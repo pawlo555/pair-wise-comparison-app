@@ -69,5 +69,5 @@ class ComplexCriteriaAddWidget(QWidget):
         for criterion in criteria_list:
             self.allCriteria.addItem(QListWidgetItem(criterion))
 
-    def update_layout(self):
+    def updateLayout(self):
         self.renderCriteriaList()

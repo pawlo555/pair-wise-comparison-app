@@ -54,16 +54,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.stackedLayout.setCurrentIndex(index)
 
     def _criteriaAddNextLayout(self):
-        self.complexCriteriaAddWidget.update_layout()
+        self.complexCriteriaAddWidget.updateLayout()
         self._setNextLayout(2)
 
     def _expertAddNextLayout(self):
         self.dataManager.initialize_matrices()
-        self.moviesRateWidget.update_layout()
+        self.moviesRateWidget.updateLayout()
         self._setNextLayout(4)
 
     def _rateMoviesNextLayout(self):
-        self.criteriaRateWidget.update_layout()
+        self.criteriaRateWidget.updateLayout()
         self._setNextLayout(5)
 
     def _calculationNextLayout(self, method: str):
