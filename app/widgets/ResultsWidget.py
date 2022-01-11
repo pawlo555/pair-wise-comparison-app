@@ -4,7 +4,7 @@ from PyQt6 import QtCore
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QListWidget, QListWidgetItem, QTableWidget, \
     QTableWidgetItem
 
-#TODO: get_result_matrix dla user, user list, inconsistency ratio
+SUMMARISED_RESULTS: str = "Summarised results"
 
 
 class ResultsWidget(QWidget):
@@ -15,6 +15,7 @@ class ResultsWidget(QWidget):
     def __init__(self, parent, dataManager):
         super().__init__(parent)
 
+        self.pickedExpert = None
         self.pickedCriterion = None
         self.criterionMatrix = None
         self.isRendering = False
@@ -32,6 +33,11 @@ class ResultsWidget(QWidget):
         titleLabel.setText("results 🏆")
         titleLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.mainLayout.addWidget(titleLabel)
+
+        # List of experts
+        self.expertsList = QListWidget(self)
+        self.expertsList.itemClicked.connect(self.expertChosen)
+        self.VListLayout.addWidget(self.expertsList)
 
         # List of criteria
         self.criteriaList = QListWidget(self)
@@ -59,8 +65,17 @@ class ResultsWidget(QWidget):
         for criterion in criteria_list:
             self.criteriaList.addItem(QListWidgetItem(criterion))
 
+        expert_list = self.dataManager.get_experts_list()
+        self.expertsList.addItem(QListWidgetItem(SUMMARISED_RESULTS))
+        for expert in expert_list:
+            self.expertsList.addItem(QListWidgetItem(expert))
+
     def criterionChosen(self, item):
         self.pickedCriterion = item.text()
+        self.updateRanking()
+
+    def expertChosen(self, item):
+        self.pickedExpert = item.text()
         self.updateRanking()
 
     def updateDF(self, r, c):
@@ -71,11 +86,14 @@ class ResultsWidget(QWidget):
         self.renderRankingMatrix()
 
     def updateRanking(self):
-        if self.pickedCriterion:
-            data = self.dataManager.get_result_matrix(self.pickedCriterion)
+        if self.pickedCriterion and self.pickedExpert:
+            expert = None if self.pickedExpert == SUMMARISED_RESULTS else self.pickedExpert
+            inconsistencyInfo = f"\n inconsistency ratio: {self.dataManager.get_inconsistency(self.pickedCriterion, expert)}" if expert else ""
+            data = self.dataManager.get_result_matrix(self.pickedCriterion, expert)
             names = self.dataManager.get_movies_list()
             self.criterionMatrix = pd.DataFrame(data=data, columns=names, index=[self.pickedCriterion])
-            self.rankingInfo.setText(f"ranking based on {self.pickedCriterion}")
+
+            self.rankingInfo.setText(f"ranking based on {self.pickedCriterion} {inconsistencyInfo}")
             self.renderRankingMatrix()
 
     def renderRankingMatrix(self):
