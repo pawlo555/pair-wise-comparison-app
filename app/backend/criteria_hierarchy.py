@@ -96,10 +96,11 @@ class TreeNode:
             print("Children: ", self.__name, self.children_names)
 
     def remove_children(self, child: str) -> None:
-        self.children.pop(child)
-        self.children_names.remove(child)
-        if self.children:
-            print("Children: ", self.__name, self.children_names)
+        if child in self.children.keys():
+            self.children.pop(child)
+            self.children_names.remove(child)
+            if self.children:
+                print("Children: ", self.__name, self.children_names)
 
     def get_children(self) -> Dict[str, 'TreeNode']:
         return self.children

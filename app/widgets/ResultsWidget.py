@@ -4,6 +4,8 @@ from PyQt6 import QtCore
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QListWidget, QListWidgetItem, QTableWidget, \
     QTableWidgetItem
 
+#TODO: get_result_matrix dla user, user list, inconsistency ratio
+
 
 class ResultsWidget(QWidget):
     """

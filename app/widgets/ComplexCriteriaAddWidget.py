@@ -54,7 +54,6 @@ class ComplexCriteriaAddWidget(QWidget):
 
         self.setLayout(self.mainLayout)
 
-    # TODO: nie można zrobić complex criterion z innego complex criterion
     def createComplexCriterion(self):
         name = self.inputLabel.text()
         items = self.allCriteria.selectedItems()
