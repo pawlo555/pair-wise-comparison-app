@@ -64,11 +64,11 @@ def aggregate_matrices(matrices: List[VotingMatrix], method: str = "EVM") -> np.
     :param method: Method used to calculate AHP - EVM or GMM
     :return: Aggregated matrix for specified list
     """
-    matrices = [voting_matrix.matrix for voting_matrix in matrices]
-    last_dim = len(matrices)
-    matrices = np.stack(matrices, axis=-1)
-    matrices = np.power(matrices, 1/last_dim)
-    aggregated_matrix = np.prod(matrices, axis=-1)
+    aggregated_matrices = [voting_matrix.matrix for voting_matrix in matrices]
+    last_dim = len(aggregated_matrices)
+    aggregated_matrices = np.stack(aggregated_matrices, axis=-1)
+    aggregated_matrices = np.power(aggregated_matrices, 1/last_dim)
+    aggregated_matrix = np.prod(aggregated_matrices, axis=-1)
     voting_matrix = VotingMatrix(matrices[0].names)
     voting_matrix.matrix = aggregated_matrix
     return voting_matrix.calc_ranking(method)
