@@ -10,7 +10,7 @@ class VotingMatrix:
     """
     The idea is to keep data as numpy matrix and if necessary convert them to pandas_frame.
     Format of array is:
-      x/y   Movie 1 Movie 2 Movie 3
+    x/y   Movie 1 Movie 2 Movie 3
     Movie 1   1        4       2
     Movie 2   1/4      1      1/2
     Movie 3   1/2     1/2      1

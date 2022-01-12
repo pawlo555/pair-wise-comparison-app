@@ -18,6 +18,7 @@ class Results:
     def __init__(self, experts: List[Expert], method: str = "EVM") -> None:
         """
         Calculate all results for the give experts and method
+
         :param experts: List of Experts
         :param method: Method of calculating ranking EVM and GMM is available
         """
@@ -29,6 +30,7 @@ class Results:
     def get_ranking(self, criterion_name: str, expert_name: str = None) -> np.ndarray:
         """
         Get the ranking vector for criterion
+
         :param criterion_name: Name of criterion
         :param expert_name: Name of expert if None method will return aggregated results
         :return: Ranking vector for criterion
@@ -41,6 +43,7 @@ class Results:
     def get_inconsistency(self, criterion_name: str, expert_name: str) -> float:
         """
         Get matrix inconsistency for selected criterion
+
         :param expert_name: Name of the expert to take matrices for
         :param criterion_name: Name of criterion
         :return: Inconsistency of matrix
@@ -50,6 +53,7 @@ class Results:
     def get_result(self, criterion_name: str, expert_name: str = None) -> np.ndarray:
         """
         Get the result vector for criterion
+
         :param criterion_name: Name of criterion
         :param expert_name: Name of expert if None method will return aggregated results
         :return: Result vector for criterion

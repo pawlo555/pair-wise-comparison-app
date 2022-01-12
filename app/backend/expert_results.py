@@ -18,6 +18,7 @@ class ExpertResults:
     def __init__(self, expert: Expert, ranking_method: str = "EVM"):
         """
         Initialize results for selected Expert
+
         :param expert: Expert used to calculated results
         :param ranking_method: method of calculating a ranking - EVM and GMM is possible
         """
@@ -36,6 +37,7 @@ class ExpertResults:
     def get_inconsistency(self, criterion_name: str, ) -> float:
         """
         Get an inconsistency value for selected criterion matrix
+
         :param criterion_name: name of criterion
         :return: Value of inconsistency for selected criterion and method of calculation
         """
@@ -44,6 +46,7 @@ class ExpertResults:
     def get_results(self, criterion_name: str) -> np.ndarray:
         """
         Get a movie results for selected criterion
+
         :param criterion_name: name of criterion
         :return: AHP results array for movies
         """
@@ -52,6 +55,7 @@ class ExpertResults:
     def get_ranking(self, criterion_name: str) -> np.ndarray:
         """
         Get a ranking for selected criterion
+
         :param criterion_name: name of criterion
         :return: Ranking for matrix elements importance
         """

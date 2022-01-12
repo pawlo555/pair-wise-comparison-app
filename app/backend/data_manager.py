@@ -1,6 +1,7 @@
 from typing import List, Dict
 
 import numpy as np
+import pandas as pd
 from app.backend.api_manager import APIManager, VALUES
 from app.backend.criteria_hierarchy import CriteriaHierarchy
 from app.backend.expert import Expert
@@ -25,7 +26,11 @@ class DataManager:
 
     def add_movie(self, movie_name: str) -> str:
         """
-            Returns dictionary containing data about movie --> APIManager.fetch_movie()
+        Returns dictionary containing data about movie --> APIManager.fetch_movie()
+        Adds information about movie to self.movies_dictionaries if movie founded
+
+        :param movie_name: Name of movie
+        :return: Dictionary containing information about movie or one "error" key
         """
         if self.api_manager:
             dictionary = self.api_manager.fetch_movie(movie_name)
@@ -38,34 +43,72 @@ class DataManager:
             return "no_api"
 
     def remove_movie(self, movie_title: str) -> None:
+        """
+        Remove a movie from movie list
+
+        :param movie_title: Title of movie
+        """
         self.movies_dictionaries.pop(movie_title)
 
     def get_movies_list(self) -> List[str]:
+        """
+        :return: List of movies
+        """
         return sorted(self.movies_dictionaries.keys())
 
     def add_criterion(self, criterion_name: str):
+        """
+        Adds a criterion
+
+        :param criterion_name: Name of criterion
+        """
         self.criteria_hierarchy.add_node(criterion_name, "Result", [])
 
     def remove_criterion(self, criterion_name: str):
+        """
+        Remove a criterion
+
+        :param criterion_name: Name of criterion
+        """
         self.criteria_hierarchy.remove_node(criterion_name)
 
     def get_all_criteria_list(self) -> List[str]:
+        """
+        :return: List of criteria
+        """
         return VALUES
 
     def get_picked_criteria_list(self) -> List[str]:
+        """
+        :return: Gets all criteria to choose most suitable
+        """
         criteria_list = self.criteria_hierarchy.criteria_list()
         return criteria_list
 
-    def create_complex_criterion(self, name: str, subcriteria: List[str], parent_name: str = "Result"):
+    def create_complex_criterion(self, name: str, subcriteria: List[str], parent_name: str = "Result") -> None:
+        """
+        :param name: Name of criterion
+        :param subcriteria: List of subcriteria
+        :param parent_name: Name of parent criterion for the new one
+        """
         self.criteria_hierarchy.add_node(name, parent_name, subcriteria)
 
     def add_expert(self, expert_name: str) -> None:
+        """
+        :param expert_name: Name of expert
+        """
         self.experts_names.append(expert_name)
 
     def delete_expert(self, expert_name: str) -> None:
+        """
+        :param expert_name: Name of expert
+        """
         self.experts_names.remove(expert_name)
 
     def get_experts_list(self) -> List[str]:
+        """
+        :return: List of current experts
+        """
         return self.experts_names
 
     def initialize_matrices(self) -> None:
@@ -76,8 +119,13 @@ class DataManager:
             self.experts[expert_name] = Expert(expert_name, self.criteria_hierarchy,
                                                sorted(self.movies_dictionaries.keys()))
 
-    def get_criterion_matrix(self, criterion_name: str, user_name: str):
-        return self.experts[user_name].get_comparisons(criterion_name)
+    def get_criterion_matrix(self, criterion_name: str, expert_name: str) -> pd.DataFrame:
+        """
+        :param criterion_name: Name of criterion
+        :param expert_name: Name of expert
+        :return: VotingMatrix as pandas DataFrame
+        """
+        return self.experts[expert_name].get_comparisons(criterion_name)
 
     def pass_criterion_matrix(self, criterion_name: str, user_name: str, matrix: np.ndarray):
         self.experts[user_name].pass_matrix(criterion_name, matrix)
@@ -85,6 +133,7 @@ class DataManager:
     def set_method(self, method_name: str = "EVM") -> None:
         """
         Sets method of calculating result matrix.
+
         :param method_name: Name of method choose between EVM and GMM.
         """
         self.method_name = method_name

@@ -8,6 +8,7 @@ from app.backend.matrix import VotingMatrix
 def calc_results(rankings: Dict[str, np.ndarray], criteria_hierarchy: CriteriaHierarchy) -> Dict[str, np.array]:
     """
     Calculates results matrix based on matrix rankings and criteriaHierarchy
+
     :param rankings: Dictionary of matrices rankings
     :param criteria_hierarchy: Hierarchy of criteria
     :return: Dictionary with AHP results of comparisons per criterion
@@ -28,36 +29,46 @@ def calc_results(rankings: Dict[str, np.ndarray], criteria_hierarchy: CriteriaHi
 
 
 def calc_aggregate_rankings(matrices: List[VotingMatrix], method: str) -> np.ndarray:
+    """
+    Calculates the aggregated rankings from lists of matrices.
+
+    :param matrices: List of AHP matrices
+    :param method: Method used to calculate AHP - EVM or GMM
+    :return: Aggregated matrix for specified list
+    """
+
     if all([np.count_nonzero(matrix == 0) == 0 for matrix in matrices]):  # all data are filled
         return aggregate_matrices(matrices, method)
     else:
         return aggregate_rankings(matrices, method)
 
 
-def aggregate_rankings(voting_matrices: List[VotingMatrix], method: str = "EVM") -> np.ndarray:
+def aggregate_rankings(matrices: List[VotingMatrix], method: str = "EVM") -> np.ndarray:
     """
     Aggregates list of ranking into one
-    :param voting_matrices: List of AHP matrices
+
+    :param matrices: List of AHP matrices
     :param method: Method used to calculate AHP - EVM or GMM
     :return: Aggregated matrix for specified list
     """
-    rankings = [matrix.calc_ranking(method) for matrix in voting_matrices]
+    rankings = [matrix.calc_ranking(method) for matrix in matrices]
     stacked = np.stack(rankings)
     return np.mean(stacked, axis=-1)
 
 
-def aggregate_matrices(voting_matrices: List[VotingMatrix], method: str = "EVM") -> np.ndarray:
+def aggregate_matrices(matrices: List[VotingMatrix], method: str = "EVM") -> np.ndarray:
     """
     Perform aggregation of matrices using geometric average in order to aggregate different experts
-    :param voting_matrices: List of voting matrices
+
+    :param matrices: List of voting matrices
     :param method: Method used to calculate AHP - EVM or GMM
     :return: Aggregated matrix for specified list
     """
-    matrices = [voting_matrix.matrix for voting_matrix in voting_matrices]
+    matrices = [voting_matrix.matrix for voting_matrix in matrices]
     last_dim = len(matrices)
     matrices = np.stack(matrices, axis=-1)
     matrices = np.power(matrices, 1/last_dim)
     aggregated_matrix = np.prod(matrices, axis=-1)
-    voting_matrix = VotingMatrix(voting_matrices[0].names)
+    voting_matrix = VotingMatrix(matrices[0].names)
     voting_matrix.matrix = aggregated_matrix
     return voting_matrix.calc_ranking(method)

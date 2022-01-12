@@ -12,13 +12,14 @@ class CriteriaHierarchy:
     def add_node(self, node_name: str, parent_name: str, children_names: List[str]) -> None:
         """
         Adds note do the tree, perform all operation to maintain structure of tree
+
         :param node_name: Name of node to add to tree
         :param parent_name: Name of node who will be parent do added nodes
         :param children_names: List of children names - if children already have a parent it will be replaced
         """
         if node_name in self.node_dict:
             return
-        # assert node_name not in self.node_dict, "Node of name: " + node_name + " is already in use"
+        assert node_name not in self.node_dict, "Node of name: " + node_name + " is already in use"
         parent = self.node_dict[parent_name]
         new_node = TreeNode(node_name, parent)
         parent.add_children(new_node)
@@ -33,6 +34,7 @@ class CriteriaHierarchy:
     def remove_node(self, node_name: str) -> None:
         """
         Remove element from the tree, if there is no such element do nothing
+
         :param node_name: Name of node to remove
         """
         if node_name == "Result":
@@ -53,6 +55,7 @@ class CriteriaHierarchy:
     def get_level(self, criterion_name) -> int:
         """
         Return the level of criterion in the tree, 0 is for the root, root's children have level 1 itd.
+
         :param criterion_name: Name of the criterion
         :return: Level of node in the tree
         """
@@ -67,6 +70,7 @@ class CriteriaHierarchy:
         """
         Returns a dictionary containing information about tree structure:
         for each key we have a list of criteria names with level got in key
+
         :return: Dictionary: level - List of criteria with this level in the tree
         """
         criteria_levels = {}
