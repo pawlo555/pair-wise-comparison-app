@@ -10,9 +10,9 @@ class ExpertResults:
     """
     Class for storing results for the specified expert.
     Implements getters to get such results:
-        - matrix inconsistency for selected criterion
-        - movies results for selected criterion
-        - matrix ranking for selected criterion (for basic criteria this two are the same)
+    - matrix inconsistency for selected criterion
+    - movies results for selected criterion
+    - matrix ranking for selected criterion (for basic criteria this two are the same)
     """
 
     def __init__(self, expert: Expert, ranking_method: str = "EVM"):
