@@ -30,6 +30,7 @@ class VotingMatrix:
     def calc_ranking(self, method: str = "EVM") -> np.ndarray:
         """
         Calc matrix ranking based on voter preferences
+
         :param method: Method of ranking calculation EVM or GMM
         :return: np.array of results: 1 - movie1, 2 - movie2
         """
@@ -61,6 +62,7 @@ class VotingMatrix:
     def __calc_ranking_gmm(self) -> np.ndarray:
         """
         Calc matrix GMM ranking based on voter preferences
+
         :return: np.array of results: 1 - movie1, 2 - movie2
         """
         if np.any(self.matrix == 0):
@@ -87,6 +89,7 @@ class VotingMatrix:
     def calc_inconsistency(self, method: str = "EVM") -> float:
         """
         Calculate matrix inconsistency
+
         :param method: Method of calculating an inconsistency: EVM or GMM
         :return: inconsistency value
         """
@@ -98,6 +101,7 @@ class VotingMatrix:
     def __calc_RI(self) -> float:
         """
         Calc inconsistency ratio
+
         :return: inconsistency ratio for specified matrix
         """
         n = self.matrix.shape[-1]
@@ -111,6 +115,7 @@ class VotingMatrix:
     def __calc_GW(self) -> float:
         """
         Calc Golden-Wang index
+
         :return: Golden-Wang index
         """
         n = self.matrix.shape[-1]
