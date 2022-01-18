@@ -1,10 +1,8 @@
-app.widgets package
+widgets
 ===================
 
-Submodules
-----------
 
-app.widgets.CalculationWidget module
+CalculationWidget
 ------------------------------------
 
 .. automodule:: app.widgets.CalculationWidget
@@ -12,31 +10,31 @@ app.widgets.CalculationWidget module
    :undoc-members:
    :show-inheritance:
 
-app.widgets.ComplexCriteriaAddWidget module
--------------------------------------------
+ComplexCriteriaAddWidget
+------------------------
 
 .. automodule:: app.widgets.ComplexCriteriaAddWidget
    :members:
    :undoc-members:
    :show-inheritance:
 
-app.widgets.CriteriaAddWidget module
-------------------------------------
+CriteriaAddWidget
+-----------------
 
 .. automodule:: app.widgets.CriteriaAddWidget
    :members:
    :undoc-members:
    :show-inheritance:
 
-app.widgets.CriteriaRateWidget module
--------------------------------------
+CriteriaRateWidget
+------------------------------
 
 .. automodule:: app.widgets.CriteriaRateWidget
    :members:
    :undoc-members:
    :show-inheritance:
 
-app.widgets.ExpertAddWidget module
+ExpertAddWidget
 ----------------------------------
 
 .. automodule:: app.widgets.ExpertAddWidget
@@ -44,7 +42,7 @@ app.widgets.ExpertAddWidget module
    :undoc-members:
    :show-inheritance:
 
-app.widgets.MovieAddWidget module
+MovieAddWidget
 ---------------------------------
 
 .. automodule:: app.widgets.MovieAddWidget
@@ -52,7 +50,7 @@ app.widgets.MovieAddWidget module
    :undoc-members:
    :show-inheritance:
 
-app.widgets.MoviesRateWidget module
+MoviesRateWidget
 -----------------------------------
 
 .. automodule:: app.widgets.MoviesRateWidget
@@ -60,7 +58,7 @@ app.widgets.MoviesRateWidget module
    :undoc-members:
    :show-inheritance:
 
-app.widgets.ResultsWidget module
+ResultsWidget
 --------------------------------
 
 .. automodule:: app.widgets.ResultsWidget
@@ -68,18 +66,10 @@ app.widgets.ResultsWidget module
    :undoc-members:
    :show-inheritance:
 
-app.widgets.ScrollableLabel module
+ScrollableLabel
 ----------------------------------
 
 .. automodule:: app.widgets.ScrollableLabel
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: app.widgets
    :members:
    :undoc-members:
    :show-inheritance:

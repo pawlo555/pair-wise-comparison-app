@@ -1,85 +1,75 @@
-app.backend package
-===================
+backend
+=======
 
-Submodules
-----------
 
-app.backend.aggreagated\_results module
----------------------------------------
+aggregated\_results
+-------------------
 
-.. automodule:: app.backend.aggreagated_results
+.. automodule:: app.backend.aggregated_results
    :members:
    :undoc-members:
    :show-inheritance:
 
-app.backend.api\_manager module
--------------------------------
+api\_manager
+------------
 
 .. automodule:: app.backend.api_manager
    :members:
    :undoc-members:
    :show-inheritance:
 
-app.backend.criteria\_hierarchy module
---------------------------------------
+criteria\_hierarchy
+-------------------
 
 .. automodule:: app.backend.criteria_hierarchy
    :members:
    :undoc-members:
    :show-inheritance:
 
-app.backend.data\_manager module
---------------------------------
+data\_manager
+-------------------------
 
 .. automodule:: app.backend.data_manager
    :members:
    :undoc-members:
    :show-inheritance:
 
-app.backend.expert module
--------------------------
+expert
+------
 
 .. automodule:: app.backend.expert
    :members:
    :undoc-members:
    :show-inheritance:
 
-app.backend.expert\_results module
-----------------------------------
+expert\_results
+---------------
 
 .. automodule:: app.backend.expert_results
    :members:
    :undoc-members:
    :show-inheritance:
 
-app.backend.matrix module
--------------------------
+matrix
+-------
 
 .. automodule:: app.backend.matrix
    :members:
    :undoc-members:
    :show-inheritance:
 
-app.backend.results module
---------------------------
+results
+-------
 
 .. automodule:: app.backend.results
    :members:
    :undoc-members:
    :show-inheritance:
 
-app.backend.utils module
-------------------------
+utils
+-----
 
 .. automodule:: app.backend.utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: app.backend
    :members:
    :undoc-members:
    :show-inheritance:

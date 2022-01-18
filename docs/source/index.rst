@@ -10,7 +10,8 @@ Welcome to PairWiseComparisonApp's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   app
+   app.backend
+   app.widgets
 
 Indices and tables
 ==================

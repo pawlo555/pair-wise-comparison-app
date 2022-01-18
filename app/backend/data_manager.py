@@ -139,23 +139,47 @@ class DataManager:
         self.method_name = method_name
 
     def calc_results(self):
+        """
+        Calculates all results for experts and aggregated.
+        """
         self.results = Results(list(self.experts.values()), method=self.method_name)
 
     def get_result_matrix(self, criterion_name: str, expert_name: str = None) -> np.ndarray:
+        """
+        :param criterion_name: Name of criterion
+        :param expert_name: Expert name if None then result is aggregated
+        :return: Results matrix for selected criterion
+        """
         return self.results.get_result(criterion_name, expert_name)
 
-    # add user inconsistency
     def get_inconsistency(self, criterion_name: str, expert_name) -> np.ndarray:
+        """
+        :param criterion_name: Name of criterion
+        :param expert_name: Expert name
+        :return: Inconsistency for specified criterion and expert
+        """
         assert expert_name in self.experts.keys(), "There is no such expert"
         return self.results.get_inconsistency(criterion_name, expert_name)
 
     def get_ranking(self, criterion_name: str, expert_name: str = None) -> np.ndarray:
+        """
+        :param criterion_name: Name of criterion
+        :param expert_name: Name of expert if None then ranking is aggregated
+        :return: Ranking matrix for selected criterion
+        """
         return self.results.get_ranking(criterion_name, expert_name)
 
     def get_movie_info(self, movie_name: str) -> Dict[str, str]:
+        """
+        :param movie_name: Name of movie
+        :return: Info about movie
+        """
         return self.movies_dictionaries[movie_name]
 
     def get_movie_criteria(self) -> List[str]:
+        """
+        :return: Basic criteria
+        """
         movie_criteria = []
         for criterion in self.criteria_hierarchy.criteria_list():
             if not self.criteria_hierarchy.node_dict[criterion].get_children():
@@ -163,6 +187,9 @@ class DataManager:
         return movie_criteria
 
     def get_complex_criteria(self) -> List[str]:
+        """
+        :return: Complex criteria
+        """
         complex_criteria = []
         for criterion in self.criteria_hierarchy.criteria_list():
             if self.criteria_hierarchy.node_dict[criterion].get_children():

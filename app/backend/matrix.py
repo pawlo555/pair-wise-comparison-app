@@ -3,7 +3,7 @@ from typing import List
 import numpy as np
 import pandas as pd
 
-RI = {1: 10**-8, 2: 10**-8, 3: 0.58, 4: 0.9, 5: 1.12, 6: 1.21, 7: 1.32, 8: 1.41, 9: 1.46, 10: 1.49}
+RI = {1: 10 ** -8, 2: 10 ** -8, 3: 0.58, 4: 0.9, 5: 1.12, 6: 1.21, 7: 1.32, 8: 1.41, 9: 1.46, 10: 1.49}
 
 
 class VotingMatrix:
@@ -25,7 +25,7 @@ class VotingMatrix:
     def add_comparison(self, x: int, y: int, value: float):
         assert value != 0, "Value cannot be 0"
         self.matrix[x][y] = value
-        self.matrix[y][x] = 1/value
+        self.matrix[y][x] = 1 / value
 
     def calc_ranking(self, method: str = "EVM") -> np.ndarray:
         """
@@ -73,7 +73,7 @@ class VotingMatrix:
             self.__feed_empty_values_gmm()
             w = np.linalg.solve(self.matrix, r)
             w = np.exp(w)
-            return w/np.sum(w)
+            return w / np.sum(w)
         else:
             n = self.matrix.shape[-1]
             geometric_average = np.array([np.prod(self.matrix, axis=-1) ** (1 / n)])
@@ -93,10 +93,13 @@ class VotingMatrix:
         :param method: Method of calculating an inconsistency: EVM or GMM
         :return: inconsistency value
         """
-        if method == "EVM":
-            return self.__calc_RI()
-        else:
-            return self.__calc_GW()
+        try:
+            if method == "EVM":
+                return self.__calc_RI()
+            else:
+                return self.__calc_GW()
+        except:
+            return 0
 
     def __calc_RI(self) -> float:
         """
@@ -119,9 +122,12 @@ class VotingMatrix:
         :return: Golden-Wang index
         """
         n = self.matrix.shape[-1]
+        print(n)
+        if n == 1:
+            return 0
         c_sharp = self.matrix / np.sum(self.matrix, axis=0)
         ranking = self.__calc_ranking_gmm()
-        rankings = [ranking for _ in range(4)]
+        rankings = [ranking for _ in range(n)]
         rankings = np.concatenate(rankings)
         ratio = np.abs(c_sharp - rankings.T)
         return np.sum(ratio) / n

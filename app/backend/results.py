@@ -3,7 +3,7 @@ from typing import List, Dict
 import numpy as np
 from app.backend.expert import Expert
 from app.backend.expert_results import ExpertResults
-from app.backend.aggreagated_results import AggregatedResults
+from app.backend.aggregated_results import AggregatedResults
 
 
 class Results:
