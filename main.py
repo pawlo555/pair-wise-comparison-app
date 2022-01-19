@@ -1,11 +1,18 @@
 import sys
+
 from PyQt6 import QtWidgets
+from PyQt6.QtGui import QFont
 
-from app import MainWindow
+from app.MainWindow import MainWindow
 
-if __name__ == "__main__":
+
+def main():
     app = QtWidgets.QApplication([])
+    app.setFont(QFont("Fantasy"))
     widget = MainWindow()
-    widget.window().show()
-
+    widget.show()
     sys.exit(app.exec())
+
+
+if __name__ == '__main__':
+    main()
