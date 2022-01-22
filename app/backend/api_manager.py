@@ -7,7 +7,7 @@ VALUES = ['title', 'year', 'kind', 'plot outline', 'directors', 'rating', 'langu
 
 class APIManager:
     def __init__(self):
-        self.imdb = IMDb(reraiseExceptions=True)
+        self.imdb = IMDb(results=1, reraiseExceptions=True)
 
     def fetch_movie(self, title: str):
         try:
