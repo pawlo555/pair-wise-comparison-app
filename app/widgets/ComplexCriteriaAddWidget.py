@@ -19,7 +19,7 @@ class ComplexCriteriaAddWidget(QWidget):
         # Title
         titleLabel = QLabel(self)
         titleLabel.setObjectName("titleLabel")
-        titleLabel.setText("set own ranking rules 🌞")
+        titleLabel.setText("set your ranking rules 🌞")
         titleLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.mainLayout.addWidget(titleLabel)
 

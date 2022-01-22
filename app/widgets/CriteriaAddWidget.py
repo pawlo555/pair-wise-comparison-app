@@ -18,7 +18,7 @@ class CriteriaAddWidget(QWidget):
         # Title
         titleLabel = QLabel(self)
         titleLabel.setObjectName("titleLabel")
-        titleLabel.setText("pick something you care about 💕")
+        titleLabel.setText("pick criteria you care about 💕")
         titleLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.mainLayout.addWidget(titleLabel)
 

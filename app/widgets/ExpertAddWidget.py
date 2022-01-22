@@ -20,7 +20,7 @@ class ExpertAddWidget(QWidget):
         # Title
         titleLabel = QLabel(self)
         titleLabel.setObjectName("titleLabel")
-        titleLabel.setText("who's the expert here? 😛")
+        titleLabel.setText("who's the expert? 😛")
         titleLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.mainLayout.addWidget(titleLabel)
 
@@ -54,6 +54,7 @@ class ExpertAddWidget(QWidget):
     def addExpert(self):
         newExpert = self.input.text()
         self.dataManager.add_expert(newExpert)
+        self.expertsList.clear()
         expertsList = self.dataManager.get_experts_list()
         for expert in expertsList:
             item = QListWidgetItem(expert)

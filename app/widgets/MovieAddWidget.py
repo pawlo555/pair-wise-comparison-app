@@ -20,7 +20,7 @@ class MovieAddWidget(QWidget):
         # Title
         titleLabel = QLabel(self)
         titleLabel.setObjectName("titleLabel")
-        titleLabel.setText("🎬 c'mon type some cool movies here 😎")
+        titleLabel.setText("type movies here 🎬")
         titleLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.mainLayout.addWidget(titleLabel)
 
