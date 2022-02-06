@@ -13,4 +13,4 @@ Application supports:
 - partially filled matrices
 - adding custom criteria
 
-To generate documentation run: make html in docs folder.
+To generate documentation run: `make html` in docs folder.
